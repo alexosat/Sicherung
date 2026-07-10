@@ -16,13 +16,13 @@ kostenlosem HTTPS (Let's Encrypt).
    wählen.
 2. **Rechenzentrum in der EU** auswählen (Datenschutz – es geht um Schülerdaten).
 3. Eine (Sub-)Domain auf die IP des VPS zeigen lassen, z. B.
-   `anmeldung.deineschule.de` (A-Record auf die Server-IP).
+   `anmeldung.obs-doerverden.de` (A-Record auf die Server-IP).
 4. **DSGVO:** Mit der Schulleitung / dem/der Datenschutzbeauftragten einen
    **Auftragsverarbeitungsvertrag (AVV)** mit Hostinger klären, bevor echte
    Daten erfasst werden.
 
-Platzhalter in dieser Anleitung ersetzen:
-- `anmeldung.deineschule.de` → deine echte Domain
+Hinweise zu dieser Anleitung:
+- Die Domain **`anmeldung.obs-doerverden.de`** ist bereits überall eingetragen.
 - Der Dienst läuft unter dem Benutzer **`anmeldung`** im Verzeichnis
   `/home/anmeldung/Sicherung`.
 
@@ -70,7 +70,7 @@ In der `.env` setzen:
 ```
 SECRET_KEY=<lange-zufaellige-zeichenkette>
 ADMIN_PASSWORD=<sicheres-passwort>
-SCHULNAME=Name deiner Schule
+SCHULNAME=Oberschule Dörverden
 COOKIE_SECURE=1
 ```
 
@@ -102,20 +102,20 @@ Die App läuft jetzt intern auf `127.0.0.1:8000`.
 
 ```bash
 cp /home/anmeldung/Sicherung/deploy/nginx-anmeldung.conf /etc/nginx/sites-available/anmeldung
-nano /etc/nginx/sites-available/anmeldung     # server_name auf deine Domain setzen
+# server_name ist bereits auf anmeldung.obs-doerverden.de gesetzt – nichts zu ändern
 
 ln -s /etc/nginx/sites-available/anmeldung /etc/nginx/sites-enabled/
 rm -f /etc/nginx/sites-enabled/default        # Standardseite entfernen
 nginx -t && systemctl reload nginx
 ```
 
-Jetzt ist die Seite unter `http://anmeldung.deineschule.de` erreichbar.
+Jetzt ist die Seite unter `http://anmeldung.obs-doerverden.de` erreichbar.
 
 ## 7. HTTPS aktivieren (kostenlos, Let's Encrypt)
 
 ```bash
 apt install -y certbot python3-certbot-nginx
-certbot --nginx -d anmeldung.deineschule.de
+certbot --nginx -d anmeldung.obs-doerverden.de
 ```
 
 certbot trägt HTTPS automatisch in die nginx-Konfiguration ein und richtet die
