@@ -26,6 +26,7 @@ from flask import (
     session,
     url_for,
 )
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 
 import export
@@ -37,6 +38,10 @@ from models import Anmeldung, db
 def create_app(config_object=Config):
     app = Flask(__name__)
     app.config.from_object(config_object)
+
+    # Hinter einem Reverse-Proxy (nginx) die X-Forwarded-* Header auswerten,
+    # damit die App HTTPS erkennt (nötig für sichere Cookies / korrekte URLs).
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
     db.init_app(app)
     with app.app_context():

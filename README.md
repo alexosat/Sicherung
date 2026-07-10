@@ -66,7 +66,13 @@ gunicorn "app:app" --bind 127.0.0.1:8000
 ```
 
 Davor gehört ein Reverse-Proxy (z. B. **nginx** oder **Caddy**), der
-TLS/HTTPS bereitstellt. Empfehlungen:
+TLS/HTTPS bereitstellt.
+
+> **Betrieb auf einem Hostinger-VPS?** Eine komplette Schritt-für-Schritt-
+> Anleitung (systemd, nginx, HTTPS) steht in **[`DEPLOY-hostinger.md`](DEPLOY-hostinger.md)**.
+> Fertige Vorlagen liegen im Ordner `deploy/`.
+
+Empfehlungen:
 
 - `SECRET_KEY` und `ADMIN_PASSWORD` sicher und einmalig setzen.
 - In der Umgebung `COOKIE_SECURE=1` setzen, wenn über HTTPS ausgeliefert wird.

@@ -1,0 +1,41 @@
+# systemd-Service für die Anmelde-App (gunicorn).
+# Ziel-Pfad auf dem Server: /etc/systemd/system/anmeldung.service
+#
+# Passe an:  <BENUTZER>, den Projektpfad und ggf. den Port.
+# Danach:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now anmeldung
+#   sudo systemctl status anmeldung
+
+[Unit]
+Description=Schulanmeldung (Flask/gunicorn)
+After=network.target
+
+[Service]
+# Eigener, nicht-privilegierter Benutzer (NICHT root)
+User=anmeldung
+Group=anmeldung
+
+# Projektverzeichnis (dorthin wurde das Repo geklont)
+WorkingDirectory=/home/anmeldung/Sicherung
+
+# Geheimnisse/Konfiguration aus einer Datei laden (siehe DEPLOY-hostinger.md).
+# Diese Datei enthält SECRET_KEY, ADMIN_PASSWORD, SCHULNAME, COOKIE_SECURE=1
+EnvironmentFile=/home/anmeldung/Sicherung/.env
+
+# gunicorn aus der virtuellen Umgebung starten, an lokalen Port binden.
+# 3 Worker sind für eine Schulanmeldung mehr als ausreichend.
+ExecStart=/home/anmeldung/Sicherung/.venv/bin/gunicorn \
+    --workers 3 \
+    --bind 127.0.0.1:8000 \
+    app:app
+
+Restart=always
+RestartSec=3
+
+# Etwas Härtung
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
