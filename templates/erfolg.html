@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block titel %}Anmeldung eingegangen{% endblock %}
+{% block inhalt %}
+  <h1>Vielen Dank!</h1>
+  <p class="lead">
+    Die Anmeldung ist bei uns eingegangen. Die Schulverwaltung prüft die
+    Angaben und meldet sich bei Rückfragen bei Ihnen.
+  </p>
+  <p><a class="knopf" href="{{ url_for('start') }}">Zur Startseite</a></p>
+{% endblock %}

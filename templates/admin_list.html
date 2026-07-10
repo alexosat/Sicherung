@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block titel %}Anmeldungen{% endblock %}
+{% block inhalt %}
+  <div class="admin-kopf">
+    <h1>Anmeldungen ({{ anmeldungen|length }})</h1>
+    <div class="admin-aktionen">
+      <a class="knopf" href="{{ url_for('admin_export') }}">Alle als CSV exportieren</a>
+      <a class="knopf knopf-neben" href="{{ url_for('admin_export', nur='offen') }}">Nur neue exportieren</a>
+      <a class="knopf knopf-schlicht" href="{{ url_for('admin_logout') }}">Abmelden</a>
+    </div>
+  </div>
+
+  {% if anmeldungen %}
+    <table class="tabelle">
+      <thead>
+        <tr>
+          <th>Eingegangen</th>
+          <th>Kind</th>
+          <th>Geburtsdatum</th>
+          <th>Art</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in anmeldungen %}
+          <tr>
+            <td>{{ a.erstellt_am.strftime('%d.%m.%Y %H:%M') }}</td>
+            <td>{{ a.anzeigename() }}</td>
+            <td>{{ a.geburtsdatum.strftime('%d.%m.%Y') }}</td>
+            <td>{% if a.anmeldeart == 'klasse5' %}Klasse 5{% else %}laufend{% endif %}</td>
+            <td>{% if a.exportiert %}<span class="badge">exportiert</span>{% else %}<span class="badge badge-neu">neu</span>{% endif %}</td>
+            <td><a href="{{ url_for('admin_detail', anmeldung_id=a.id) }}">Details</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Es liegen noch keine Anmeldungen vor.</p>
+  {% endif %}
+{% endblock %}

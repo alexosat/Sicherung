@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block titel %}Anmeldung {{ a.anzeigename() }}{% endblock %}
+
+{% macro zeile(bez, wert) %}
+  {% if wert %}<tr><th>{{ bez }}</th><td>{{ wert }}</td></tr>{% endif %}
+{% endmacro %}
+
+{% block inhalt %}
+  <p><a href="{{ url_for('admin') }}">&larr; Zurück zur Liste</a></p>
+  <h1>{{ a.anzeigename() }}</h1>
+
+  <h2>Kind</h2>
+  <table class="tabelle tabelle-detail">
+    {{ zeile('Nachname', a.schueler_nachname) }}
+    {{ zeile('Vorname', a.schueler_vorname) }}
+    {{ zeile('Rufname', a.schueler_rufname) }}
+    {{ zeile('Geschlecht', a.geschlecht) }}
+    {{ zeile('Geburtsdatum', a.geburtsdatum.strftime('%d.%m.%Y')) }}
+    {{ zeile('Geburtsort', a.geburtsort) }}
+    {{ zeile('Staatsangehörigkeit', a.staatsangehoerigkeit) }}
+    {{ zeile('Konfession', a.konfession) }}
+    {{ zeile('Verkehrssprache', a.verkehrssprache) }}
+    {{ zeile('Anschrift', (a.strasse ~ ' ' ~ a.hausnummer ~ ', ' ~ a.plz ~ ' ' ~ a.ort)) }}
+  </table>
+
+  <h2>Anmeldung</h2>
+  <table class="tabelle tabelle-detail">
+    {{ zeile('Art', 'Neuanmeldung Klasse 5' if a.anmeldeart == 'klasse5' else 'Aufnahme im laufenden Schuljahr') }}
+    {{ zeile('Klassenstufe', a.klassenstufe) }}
+    {{ zeile('Aufnahmedatum', a.aufnahmedatum.strftime('%d.%m.%Y') if a.aufnahmedatum) }}
+    {{ zeile('1. Fremdsprache', a.fremdsprache1) }}
+    {{ zeile('2. Fremdsprache', a.fremdsprache2) }}
+    {{ zeile('Ganztag', a.ganztag) }}
+    {{ zeile('Bisherige Schule', a.bisherige_schule) }}
+    {{ zeile('Ort bisherige Schule', a.bisherige_schule_ort) }}
+  </table>
+
+  <h2>Erziehungsberechtigte(r) 1</h2>
+  <table class="tabelle tabelle-detail">
+    {{ zeile('Name', (a.eb1_anrede ~ ' ' ~ a.eb1_vorname ~ ' ' ~ a.eb1_nachname)) }}
+    {{ zeile('Verhältnis', a.eb1_verhaeltnis) }}
+    {{ zeile('Telefon', a.eb1_telefon) }}
+    {{ zeile('Mobil', a.eb1_mobil) }}
+    {{ zeile('E-Mail', a.eb1_email) }}
+    {{ zeile('Sorgerecht', a.eb1_sorgerecht) }}
+    {{ zeile('Abw. Anschrift', (a.eb1_strasse ~ ' ' ~ a.eb1_plz ~ ' ' ~ a.eb1_ort) if a.eb1_strasse) }}
+  </table>
+
+  {% if a.eb2_nachname %}
+  <h2>Erziehungsberechtigte(r) 2</h2>
+  <table class="tabelle tabelle-detail">
+    {{ zeile('Name', (a.eb2_anrede ~ ' ' ~ a.eb2_vorname ~ ' ' ~ a.eb2_nachname)) }}
+    {{ zeile('Verhältnis', a.eb2_verhaeltnis) }}
+    {{ zeile('Telefon', a.eb2_telefon) }}
+    {{ zeile('Mobil', a.eb2_mobil) }}
+    {{ zeile('E-Mail', a.eb2_email) }}
+    {{ zeile('Sorgerecht', a.eb2_sorgerecht) }}
+  </table>
+  {% endif %}
+
+  <h2>Notfall &amp; Sonstiges</h2>
+  <table class="tabelle tabelle-detail">
+    {{ zeile('Notfallkontakt', a.notfallkontakt) }}
+    {{ zeile('Geschwister', a.geschwister) }}
+    {{ zeile('Bemerkungen', a.bemerkungen) }}
+  </table>
+
+  <form method="post" action="{{ url_for('admin_loeschen', anmeldung_id=a.id) }}"
+        onsubmit="return confirm('Diese Anmeldung endgültig löschen?');" class="loeschform">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="knopf knopf-loeschen">Anmeldung löschen</button>
+  </form>
+{% endblock %}

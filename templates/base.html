@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titel %}Schulanmeldung{% endblock %} – {{ schulname }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="kopf">
+    <a class="marke" href="{{ url_for('start') }}">{{ schulname }}</a>
+    <nav>
+      <a href="{{ url_for('anmeldung') }}">Anmeldung</a>
+      <a href="{{ url_for('datenschutz') }}">Datenschutz</a>
+    </nav>
+  </header>
+
+  <main class="inhalt">
+    {% with meldungen = get_flashed_messages(with_categories=true) %}
+      {% if meldungen %}
+        {% for kategorie, text in meldungen %}
+          <div class="hinweis {{ kategorie }}">{{ text }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block inhalt %}{% endblock %}
+  </main>
+
+  <footer class="fuss">
+    <p>© {{ schulname }} · <a href="{{ url_for('datenschutz') }}">Datenschutz</a></p>
+  </footer>
+</body>
+</html>

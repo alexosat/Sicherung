@@ -1,0 +1,124 @@
+:root {
+  --blau: #1f5c8b;
+  --blau-dunkel: #163f60;
+  --grau: #f4f6f8;
+  --rand: #d4dae0;
+  --text: #1f2933;
+  --fehler: #b3261e;
+  --ok: #216e39;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: var(--grau);
+  line-height: 1.5;
+}
+
+.kopf {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  background: var(--blau);
+  color: #fff;
+  padding: .8rem 1.2rem;
+}
+.kopf a { color: #fff; text-decoration: none; }
+.marke { font-weight: 700; font-size: 1.1rem; }
+.kopf nav a { margin-left: 1rem; }
+.kopf nav a:hover { text-decoration: underline; }
+
+.inhalt {
+  max-width: 900px;
+  margin: 1.5rem auto;
+  padding: 0 1rem 2rem;
+}
+
+h1 { color: var(--blau-dunkel); }
+.lead { font-size: 1.1rem; }
+.klein { font-size: .88rem; color: #52606d; }
+
+.knopf {
+  display: inline-block;
+  background: var(--blau);
+  color: #fff;
+  padding: .6rem 1.1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+.knopf:hover { background: var(--blau-dunkel); }
+.knopf-neben { background: #52606d; }
+.knopf-schlicht { background: transparent; color: var(--blau); text-decoration: underline; }
+.knopf-loeschen { background: var(--fehler); }
+
+/* Formular */
+fieldset {
+  border: 1px solid var(--rand);
+  border-radius: 8px;
+  background: #fff;
+  margin: 1.2rem 0;
+  padding: 1rem 1.2rem 1.4rem;
+}
+legend { font-weight: 700; color: var(--blau-dunkel); padding: 0 .4rem; }
+
+.raster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .8rem 1.2rem;
+}
+.feld { display: flex; flex-direction: column; margin-bottom: .4rem; }
+.feld label { font-size: .9rem; font-weight: 600; margin-bottom: .25rem; }
+.feld input, .feld select, .feld textarea {
+  padding: .5rem .6rem;
+  border: 1px solid var(--rand);
+  border-radius: 5px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.feld textarea { min-height: 90px; }
+.feld-einwilligung label { font-weight: 400; display: flex; gap: .5rem; align-items: flex-start; }
+.feld-fehler input, .feld-fehler select { border-color: var(--fehler); }
+.fehlertext { color: var(--fehler); font-size: .82rem; margin-top: .2rem; }
+
+/* Honeypot unsichtbar */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Hinweise / Flash */
+.hinweis { padding: .7rem 1rem; border-radius: 6px; margin-bottom: 1rem; }
+.hinweis.ok { background: #e3f4e8; color: var(--ok); border: 1px solid #a6d8b6; }
+.hinweis.fehler { background: #fdecea; color: var(--fehler); border: 1px solid #f3b6b1; }
+
+/* Admin */
+.admin-kopf { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .6rem; }
+.admin-aktionen { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+.tabelle { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
+.tabelle th, .tabelle td { text-align: left; padding: .55rem .7rem; border-bottom: 1px solid var(--rand); }
+.tabelle thead th { background: var(--grau); }
+.tabelle-detail th { width: 220px; color: #52606d; vertical-align: top; }
+
+.badge { background: #e0e6ec; border-radius: 999px; padding: .1rem .6rem; font-size: .8rem; }
+.badge-neu { background: #cfe4f5; color: var(--blau-dunkel); }
+
+.loeschform { margin-top: 2rem; }
+
+.fuss { text-align: center; color: #52606d; padding: 1.5rem; font-size: .85rem; }
+.fuss a { color: var(--blau); }
+
+@media (max-width: 600px) {
+  .tabelle-detail th { width: auto; }
+}

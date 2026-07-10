@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block titel %}Anmeldung{% endblock %}
+
+{% macro feld(f) %}
+  <div class="feld{% if f.errors %} feld-fehler{% endif %}">
+    {{ f.label }}
+    {{ f() }}
+    {% for e in f.errors %}<span class="fehlertext">{{ e }}</span>{% endfor %}
+  </div>
+{% endmacro %}
+
+{% block inhalt %}
+  <h1>Anmeldung Ihres Kindes</h1>
+  <p class="klein">Felder mit * sind Pflichtfelder.</p>
+
+  <form method="post" novalidate class="anmeldeformular">
+    {{ form.csrf_token }}
+
+    {# Honeypot: für Menschen unsichtbar, nur Bots füllen es aus #}
+    <div class="honeypot" aria-hidden="true">
+      {{ form.website.label }} {{ form.website(tabindex="-1", autocomplete="off") }}
+    </div>
+
+    <fieldset>
+      <legend>Art der Anmeldung</legend>
+      {{ feld(form.anmeldeart) }}
+    </fieldset>
+
+    <fieldset>
+      <legend>Angaben zum Kind</legend>
+      <div class="raster">
+        {{ feld(form.schueler_nachname) }}
+        {{ feld(form.schueler_vorname) }}
+        {{ feld(form.schueler_rufname) }}
+        {{ feld(form.geschlecht) }}
+        {{ feld(form.geburtsdatum) }}
+        {{ feld(form.geburtsort) }}
+        {{ feld(form.staatsangehoerigkeit) }}
+        {{ feld(form.konfession) }}
+        {{ feld(form.verkehrssprache) }}
+      </div>
+      <div class="raster">
+        {{ feld(form.strasse) }}
+        {{ feld(form.hausnummer) }}
+        {{ feld(form.plz) }}
+        {{ feld(form.ort) }}
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Angaben zur Anmeldung</legend>
+      <div class="raster">
+        {{ feld(form.klassenstufe) }}
+        {{ feld(form.aufnahmedatum) }}
+        {{ feld(form.fremdsprache1) }}
+        {{ feld(form.fremdsprache2) }}
+        {{ feld(form.ganztag) }}
+        {{ feld(form.bisherige_schule) }}
+        {{ feld(form.bisherige_schule_ort) }}
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Erziehungsberechtigte(r) 1</legend>
+      <div class="raster">
+        {{ feld(form.eb1_anrede) }}
+        {{ feld(form.eb1_nachname) }}
+        {{ feld(form.eb1_vorname) }}
+        {{ feld(form.eb1_verhaeltnis) }}
+        {{ feld(form.eb1_telefon) }}
+        {{ feld(form.eb1_mobil) }}
+        {{ feld(form.eb1_email) }}
+        {{ feld(form.eb1_sorgerecht) }}
+        {{ feld(form.eb1_strasse) }}
+        {{ feld(form.eb1_plz) }}
+        {{ feld(form.eb1_ort) }}
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Erziehungsberechtigte(r) 2 <span class="klein">(optional)</span></legend>
+      <div class="raster">
+        {{ feld(form.eb2_anrede) }}
+        {{ feld(form.eb2_nachname) }}
+        {{ feld(form.eb2_vorname) }}
+        {{ feld(form.eb2_verhaeltnis) }}
+        {{ feld(form.eb2_telefon) }}
+        {{ feld(form.eb2_mobil) }}
+        {{ feld(form.eb2_email) }}
+        {{ feld(form.eb2_sorgerecht) }}
+        {{ feld(form.eb2_strasse) }}
+        {{ feld(form.eb2_plz) }}
+        {{ feld(form.eb2_ort) }}
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Notfall &amp; Sonstiges</legend>
+      <div class="raster">
+        {{ feld(form.notfallkontakt) }}
+        {{ feld(form.geschwister) }}
+      </div>
+      {{ feld(form.bemerkungen) }}
+    </fieldset>
+
+    <fieldset>
+      <legend>Datenschutz</legend>
+      <div class="feld feld-einwilligung{% if form.einwilligung.errors %} feld-fehler{% endif %}">
+        <label>{{ form.einwilligung() }}
+          Ich habe die <a href="{{ url_for('datenschutz') }}" target="_blank">Datenschutzerklärung</a>
+          gelesen und willige in die Verarbeitung der angegebenen Daten zum
+          Zweck der Schulanmeldung ein.</label>
+        {% for e in form.einwilligung.errors %}<span class="fehlertext">{{ e }}</span>{% endfor %}
+      </div>
+    </fieldset>
+
+    <button type="submit" class="knopf">Anmeldung absenden</button>
+  </form>
+{% endblock %}

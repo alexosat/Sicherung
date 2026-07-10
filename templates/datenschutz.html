@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block titel %}Datenschutz{% endblock %}
+{% block inhalt %}
+  <h1>Datenschutzerklärung</h1>
+
+  <div class="hinweis fehler">
+    <strong>Platzhalter:</strong> Dieser Text ist ein Muster und MUSS von der
+    Schule bzw. der/dem Datenschutzbeauftragten an die tatsächlichen
+    Gegebenheiten angepasst werden, bevor die Seite öffentlich genutzt wird.
+  </div>
+
+  <h2>Verantwortliche Stelle</h2>
+  <p>{{ schulname }}<br>[Anschrift, Telefon, E-Mail der Schule eintragen]</p>
+
+  <h2>Zweck der Verarbeitung</h2>
+  <p>
+    Die über dieses Formular erhobenen Daten dienen ausschließlich der
+    Anmeldung und Aufnahme Ihres Kindes an {{ schulname }} sowie der
+    Übernahme in das Schulverwaltungsprogramm.
+  </p>
+
+  <h2>Rechtsgrundlage</h2>
+  <p>
+    Die Verarbeitung erfolgt auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1
+    lit. a DSGVO) sowie der einschlägigen landesrechtlichen Vorschriften zur
+    Schulverwaltung. [Bitte konkrete Rechtsgrundlagen des Bundeslandes
+    ergänzen.]
+  </p>
+
+  <h2>Speicherdauer</h2>
+  <p>
+    Die Daten werden nur so lange gespeichert, wie es für die Anmeldung und
+    die gesetzlich vorgeschriebene Aufbewahrung erforderlich ist. [Fristen
+    ergänzen.]
+  </p>
+
+  <h2>Ihre Rechte</h2>
+  <p>
+    Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung
+    der Verarbeitung sowie Widerruf Ihrer Einwilligung. Wenden Sie sich hierzu
+    an die oben genannte Stelle oder an die/den Datenschutzbeauftragte(n)
+    der Schule.
+  </p>
+{% endblock %}

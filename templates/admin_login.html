@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block titel %}Admin-Login{% endblock %}
+{% block inhalt %}
+  <h1>Verwaltungsbereich</h1>
+  <form method="post" class="loginformular">
+    {{ form.csrf_token }}
+    <div class="feld">
+      {{ form.passwort.label }}
+      {{ form.passwort(type="password", autocomplete="current-password") }}
+    </div>
+    <button type="submit" class="knopf">Anmelden</button>
+  </form>
+{% endblock %}

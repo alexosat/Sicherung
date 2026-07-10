@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Datenbank (enthält personenbezogene Daten – niemals einchecken!)
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Umgebungsvariablen / Geheimnisse
+.env
+
+# Exporte (können personenbezogene Daten enthalten)
+export/
+*.csv
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
