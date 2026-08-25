@@ -261,6 +261,45 @@
   .ag-note { margin-top: 1.8rem; color: var(--muted); font-size: .9rem; display: inline-flex; align-items: center; gap: .5rem; }
   .ag-note svg { width: 1.05em; height: 1.05em; color: var(--primary); flex: none; }
 
+  /* ---------- Aktuelles: Fluss-Zeitstrahl ---------- */
+  .news-track { position: relative; margin-top: 2.8rem; }
+  .news-river { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: visible; }
+  .news-river .base { stroke: var(--line); stroke-width: 4; fill: none; }
+  .news-river .draw { stroke: var(--primary); stroke-width: 4; fill: none; stroke-linecap: round; }
+  .news-head { position: absolute; width: 15px; height: 15px; border-radius: 50%; background: var(--primary); transform: translate(-50%, -50%); z-index: 3; opacity: 0; box-shadow: 0 0 0 6px color-mix(in srgb, var(--primary) 22%, transparent); }
+  .news-nodes { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .news-node { position: absolute; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); border: 3px solid var(--primary); transform: translate(-50%, -50%) scale(.4); opacity: 0; transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s; }
+  .news-node.in { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+
+  .news-list { position: relative; z-index: 1; display: grid; gap: clamp(1.6rem, 4vw, 3.2rem); }
+  .news-item { display: grid; grid-template-columns: 1fr 120px 1fr; column-gap: 0; align-items: center; }
+  .news-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.3rem 1.4rem; max-width: 400px; opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s ease, box-shadow .2s ease; }
+  .news-item.in .news-card { opacity: 1; transform: none; }
+  .news-card:hover { box-shadow: var(--shadow); }
+  .news-item:nth-child(odd) .news-card { grid-column: 1; justify-self: end; }
+  .news-item:nth-child(even) .news-card { grid-column: 3; justify-self: start; }
+  .news-tag { display: inline-flex; align-items: center; gap: .4rem; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--primary); background: var(--primary-soft); padding: .25rem .6rem; border-radius: 100px; }
+  .news-tag.termin { color: var(--green); background: color-mix(in srgb, var(--green) 15%, var(--surface)); }
+  .news-card h3 { font-size: var(--step-1); margin: .7rem 0 0; }
+  .news-date { display: flex; align-items: baseline; gap: .45rem; color: var(--primary); font-weight: 600; margin-top: .5rem; }
+  .news-date b { font-family: "Fraunces", serif; font-size: 1.5rem; line-height: 1; }
+  .news-date span { color: var(--muted); font-weight: 500; font-size: .9rem; }
+  .news-card p { color: var(--muted); font-size: .94rem; margin-top: .5rem; }
+  .news-cta { text-align: center; margin-top: 2.8rem; position: relative; z-index: 1; }
+
+  @media (max-width: 760px) {
+    .news-river { display: none; }
+    .news-track::before { content: ""; position: absolute; left: 9px; top: 0; bottom: 0; width: 3px; background: var(--line); border-radius: 3px; }
+    .news-track.drawn::before { background: linear-gradient(var(--primary) 0 100%); }
+    .news-item { grid-template-columns: 1fr; padding-left: 2.4rem; }
+    .news-item:nth-child(odd) .news-card, .news-item:nth-child(even) .news-card { grid-column: 1; justify-self: stretch; max-width: none; }
+    .news-head { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .news-card, .news-node { transition: none; opacity: 1; transform: none; }
+    .news-node { transform: translate(-50%, -50%) scale(1); }
+  }
+
   /* ---------- CTA band ---------- */
   .cta-band {
     background: linear-gradient(155deg, var(--primary-deep), var(--primary));
@@ -327,6 +366,7 @@
       <a href="#warum">Warum wir</a>
       <a href="#profil">Schulprofil</a>
       <a href="#ags">AGs</a>
+      <a href="#aktuelles">Aktuelles</a>
       <a href="#anmeldung">Anmeldung</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
@@ -531,6 +571,70 @@
     </div>
   </section>
 
+  <!-- ===== AKTUELLES: Fluss-Zeitstrahl ===== -->
+  <section class="band" id="aktuelles">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Aktuelles &amp; Termine</span>
+        <h2>Was bei uns fließt.</h2>
+        <p>Feste, Projekte und Termine — folgt dem Lauf von Aller und Weser durch unser Schuljahr.</p>
+      </div>
+      <div class="news-track" id="newsTrack">
+        <svg class="news-river" id="newsRiver" viewBox="0 0 100 100" aria-hidden="true">
+          <path class="base" id="riverBase" d=""/>
+          <path class="draw" id="riverDraw" d=""/>
+        </svg>
+        <div class="news-nodes" id="newsNodes"></div>
+        <div class="news-head" id="newsHead"></div>
+        <div class="news-list" id="newsList">
+          <article class="news-item">
+            <div class="news-card">
+              <span class="news-tag termin">Termin</span>
+              <h3>Tag der offenen Tür</h3>
+              <div class="news-date"><b>15.</b> <span>November 2026</span></div>
+              <p>Unterricht zum Anfassen, Ganztag und AGs erleben — Schülerinnen, Schüler und das Kollegium freuen sich auf euch.</p>
+            </div>
+          </article>
+          <article class="news-item">
+            <div class="news-card">
+              <span class="news-tag">News</span>
+              <h3>Vorlesewettbewerb der 6. Klassen</h3>
+              <div class="news-date"><b>04.</b> <span>Dezember 2026</span></div>
+              <p>Unsere besten Leserinnen und Leser treten gegeneinander an — spannend, vorgetragen vor der ganzen Jahrgangsstufe.</p>
+            </div>
+          </article>
+          <article class="news-item">
+            <div class="news-card">
+              <span class="news-tag termin">Termin</span>
+              <h3>Anmeldewoche für Klasse 5</h3>
+              <div class="news-date"><b>Feb.</b> <span>2027</span></div>
+              <p>Der Weg an unsere Schule startet — persönliche Beratung inklusive. Alle Infos folgen rechtzeitig hier.</p>
+            </div>
+          </article>
+          <article class="news-item">
+            <div class="news-card">
+              <span class="news-tag">News</span>
+              <h3>Projektwoche Berufsorientierung</h3>
+              <div class="news-date"><b>März</b> <span>2027</span></div>
+              <p>Praxistage, Betriebe und echte Einblicke — unsere Jahrgänge 8 bis 10 entdecken ihre Wege nach der Schule.</p>
+            </div>
+          </article>
+          <article class="news-item">
+            <div class="news-card">
+              <span class="news-tag termin">Termin</span>
+              <h3>Schulfest an Aller &amp; Weser</h3>
+              <div class="news-date"><b>Juni</b> <span>2027</span></div>
+              <p>Der große Treffpunkt zum Schuljahresende — Bühne, Mitmach-Stände und die ganze Schulgemeinschaft.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="news-cta">
+        <a class="btn btn-ghost" href="#">Alle Termine ansehen</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== ANMELDUNG ===== -->
   <section class="band" id="anmeldung">
     <div class="wrap">
@@ -644,5 +748,83 @@
         try { localStorage.setItem(key, next); } catch (e) {}
       });
     }
+  })();
+</script>
+
+<script>
+  /* Aktuelles – Fluss-Zeitstrahl "Strömung" (Pixel-Koordinaten) */
+  (function () {
+    var track = document.getElementById("newsTrack");
+    if (!track) return;
+    var svg = document.getElementById("newsRiver");
+    var base = document.getElementById("riverBase");
+    var draw = document.getElementById("riverDraw");
+    var head = document.getElementById("newsHead");
+    var nodesLayer = document.getElementById("newsNodes");
+    var items = Array.prototype.slice.call(track.querySelectorAll(".news-item"));
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function mobile() { return window.matchMedia("(max-width: 760px)").matches; }
+
+    var nodes = items.map(function () {
+      var n = document.createElement("div");
+      n.className = "news-node";
+      nodesLayer.appendChild(n);
+      return n;
+    });
+
+    var W = 0, H = 0, len = 0;
+    function xAt(t) { // Pixel: sanfter Mäander um die Mitte
+      var amp = Math.min(58, W * 0.06);
+      return W / 2 + amp * Math.sin(t * Math.PI * 2.6);
+    }
+    function build() {
+      W = track.clientWidth; H = track.clientHeight;
+      svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+      var d = "M " + xAt(0).toFixed(1) + " 0";
+      for (var i = 1; i <= 120; i++) { var t = i / 120; d += " L " + xAt(t).toFixed(1) + " " + (t * H).toFixed(1); }
+      base.setAttribute("d", d); draw.setAttribute("d", d);
+      len = draw.getTotalLength();
+      draw.style.strokeDasharray = len;
+      items.forEach(function (item, i) {
+        var cy = item.offsetTop + item.offsetHeight / 2;
+        var t = H ? cy / H : 0;
+        nodes[i].style.top = cy + "px";
+        nodes[i].style.left = (mobile() ? 9 : xAt(t)) + "px";
+      });
+      onScroll();
+    }
+    function onScroll() {
+      if (reduce) { draw.style.strokeDashoffset = 0; return; }
+      var r = track.getBoundingClientRect();
+      var winH = window.innerHeight;
+      var p = (winH * 0.82 - r.top) / (r.height + winH * 0.30);
+      p = Math.max(0, Math.min(1, p));
+      draw.style.strokeDashoffset = len * (1 - p);
+      if (!mobile()) {
+        head.style.left = xAt(p) + "px";
+        head.style.top = (p * H) + "px";
+        head.style.opacity = (p > 0.01 && p < 0.995) ? "1" : "0";
+      } else { head.style.opacity = "0"; }
+    }
+
+    if ("IntersectionObserver" in window && !reduce) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            var idx = items.indexOf(e.target);
+            if (idx > -1 && nodes[idx]) nodes[idx].classList.add("in");
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.35 });
+      items.forEach(function (it) { io.observe(it); });
+    } else {
+      items.forEach(function (it, i) { it.classList.add("in"); nodes[i].classList.add("in"); });
+    }
+
+    build();
+    window.addEventListener("resize", build);
+    window.addEventListener("scroll", onScroll, { passive: true });
   })();
 </script>
