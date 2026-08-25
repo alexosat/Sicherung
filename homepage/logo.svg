@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 185" width="240" height="185" role="img" aria-label="Aller-Weser-Oberschule Dörverden">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 170 C 56 58, 184 58, 184 170" stroke="#1B6CA3" stroke-width="13"/>
+    <path d="M70 116 C 90 104, 102 128, 122 116 C 145 102, 158 126, 180 108" stroke="#1B6CA3" stroke-width="8"/>
+    <path d="M70 123 C 92 135, 103 110, 125 123 C 150 137, 166 106, 214 74 L 232 69" stroke="#3C8C81" stroke-width="8"/>
+  </g>
+</svg>

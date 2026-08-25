@@ -6,17 +6,17 @@
 <style>
   :root {
     /* Light palette — warm river-paper */
-    --bg: #F5F4EE;
+    --bg: #F3F6F7;
     --surface: #FFFFFF;
-    --surface-2: #EEEDE5;
-    --ink: #16262C;
-    --muted: #566268;
-    --line: #E2E0D6;
-    --primary: #1C6E79;
-    --primary-deep: #124A52;
-    --primary-soft: #DCEBEC;
-    --green: #6E9A3E;
-    --sand: #C58836;
+    --surface-2: #E9EEF1;
+    --ink: #22323A;
+    --muted: #5A6B73;
+    --line: #DCE5E9;
+    --primary: #1B6CA3;
+    --primary-deep: #145480;
+    --primary-soft: #E1EDF6;
+    --green: #3C8C81;
+    --sand: #4E9A8E;
     --shadow: 0 1px 2px rgba(18,42,44,.05), 0 12px 32px -12px rgba(18,42,44,.14);
     --shadow-sm: 0 1px 2px rgba(18,42,44,.06), 0 4px 14px -8px rgba(18,42,44,.16);
 
@@ -32,33 +32,33 @@
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0F181C;
-      --surface: #16232A;
-      --surface-2: #1B2A31;
-      --ink: #ECF1F0;
-      --muted: #9CAFB4;
-      --line: #26383F;
-      --primary: #52B7C1;
-      --primary-deep: #2C818B;
-      --primary-soft: #16323A;
-      --green: #99C160;
-      --sand: #DFA65F;
+      --bg: #0E1A21;
+      --surface: #14232B;
+      --surface-2: #1A2C34;
+      --ink: #E9F0F2;
+      --muted: #93A6AD;
+      --line: #223842;
+      --primary: #4FA3D8;
+      --primary-deep: #2E7FB4;
+      --primary-soft: #143040;
+      --green: #5FB4A8;
+      --sand: #4E9A8E;
       --shadow: 0 1px 2px rgba(0,0,0,.3), 0 18px 40px -16px rgba(0,0,0,.6);
       --shadow-sm: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px -10px rgba(0,0,0,.55);
     }
   }
   :root[data-theme="dark"] {
-    --bg: #0F181C;
-    --surface: #16232A;
-    --surface-2: #1B2A31;
-    --ink: #ECF1F0;
-    --muted: #9CAFB4;
-    --line: #26383F;
-    --primary: #52B7C1;
-    --primary-deep: #2C818B;
-    --primary-soft: #16323A;
-    --green: #99C160;
-    --sand: #DFA65F;
+    --bg: #0E1A21;
+    --surface: #14232B;
+    --surface-2: #1A2C34;
+    --ink: #E9F0F2;
+    --muted: #93A6AD;
+    --line: #223842;
+    --primary: #4FA3D8;
+    --primary-deep: #2E7FB4;
+    --primary-soft: #143040;
+    --green: #5FB4A8;
+    --sand: #4E9A8E;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 18px 40px -16px rgba(0,0,0,.6);
     --shadow-sm: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px -10px rgba(0,0,0,.55);
   }
@@ -126,7 +126,7 @@
   }
   .nav { display: flex; align-items: center; gap: 1.5rem; height: 72px; }
   .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: var(--ink); font-weight: 700; }
-  .logo-mark { width: 40px; height: 40px; flex: none; border-radius: 11px; }
+  .logo-mark { width: 48px; height: 37px; flex: none; }
   .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
   .brand-text b { font-family: "Fraunces", serif; font-size: 1.06rem; letter-spacing: -.01em; }
   .brand-text span { font-size: .72rem; color: var(--muted); font-weight: 500; letter-spacing: .04em; }
@@ -310,10 +310,12 @@
 <header>
   <div class="wrap nav">
     <a class="brand" href="#top" aria-label="Aller-Weser-Oberschule Startseite">
-      <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">
-        <rect width="40" height="40" rx="11" fill="var(--primary)"/>
-        <path d="M6 24 C 13 17, 17 17, 20 22 C 23 27, 27 27, 34 20" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".95"/>
-        <path d="M6 30 C 13 23, 17 23, 20 28 C 23 33, 27 33, 34 26" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/>
+      <svg class="logo-mark" viewBox="0 0 240 185" aria-hidden="true">
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M56 170 C 56 58, 184 58, 184 170" stroke="var(--primary)" stroke-width="13"/>
+          <path d="M70 116 C 90 104, 102 128, 122 116 C 145 102, 158 126, 180 108" stroke="var(--primary)" stroke-width="8"/>
+          <path d="M70 123 C 92 135, 103 110, 125 123 C 150 137, 166 106, 214 74 L 232 69" stroke="var(--green)" stroke-width="8"/>
+        </g>
       </svg>
       <span class="brand-text"><b>Aller-Weser-Oberschule</b><span>Dörverden · Klassen 5–10</span></span>
     </a>
@@ -515,7 +517,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a class="brand" href="#top" style="text-decoration:none;">
-          <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="var(--primary)"/><path d="M6 24 C 13 17, 17 17, 20 22 C 23 27, 27 27, 34 20" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M6 30 C 13 23, 17 23, 20 28 C 23 33, 27 33, 34 26" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".6"/></svg>
+          <svg class="logo-mark" viewBox="0 0 240 185" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M56 170 C 56 58, 184 58, 184 170" stroke="var(--primary)" stroke-width="13"/><path d="M70 116 C 90 104, 102 128, 122 116 C 145 102, 158 126, 180 108" stroke="var(--primary)" stroke-width="8"/><path d="M70 123 C 92 135, 103 110, 125 123 C 150 137, 166 106, 214 74 L 232 69" stroke="var(--green)" stroke-width="8"/></g></svg>
           <span class="brand-text"><b>Aller-Weser-Oberschule</b><span>Dörverden</span></span>
         </a>
         <p>Oberschule für die Klassen 5 bis 10 — mitten in Dörverden, zwischen Aller und Weser.</p>
