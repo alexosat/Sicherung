@@ -30,6 +30,14 @@ if ( ! function_exists( 'aws_enqueue' ) ) {
 			array(),
 			wp_get_theme()->get( 'Version' )
 		);
+		// Animation für den Aktuelles-/Termine-Bereich (Fluss-Zeitstrahl).
+		wp_enqueue_script(
+			'aws-river-news',
+			get_theme_file_uri( 'assets/js/river-news.js' ),
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			true
+		);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'aws_enqueue' );

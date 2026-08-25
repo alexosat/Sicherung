@@ -49,6 +49,18 @@ Für jede der drei Seiten:
   löschen, an gleicher Stelle einen **Bild-Block** einfügen und ein Foto hochladen.
 - **Anmelde-Button:** verlinkt bereits auf `https://anmeldung.obs-doerverden.de`.
 
+### Termine im Bereich „Aktuelles" pflegen
+
+Der Fluss-Zeitstrahl im Abschnitt **Aktuelles** besteht aus Karten (Block „news-item").
+Im Site-Editor (Front Page):
+- **Text/Datum ändern:** Karte anklicken und Tag, Titel, Datum oder Text überschreiben.
+- **Termin hinzufügen:** eine bestehende „news-item"-Gruppe in der Listenansicht auswählen,
+  **duplizieren** und die Inhalte anpassen. Die Flusslinie und die Punkte passen sich
+  automatisch an (die Animation läuft im Front-End).
+- **Termin entfernen:** die „news-item"-Gruppe löschen.
+- Die Kennzeichnung **Termin/News** steuert die kleine Markierung oben auf der Karte
+  (Klasse `termin` = grün, ohne = blau).
+
 ## 6. Noch auszufüllen (rechtlich prüfen)
 
 Die gelb markierten Stellen in den Rechtstexten:
