@@ -251,6 +251,16 @@
   .step h3 { font-size: var(--step-1); }
   .step p { color: var(--muted); font-size: .93rem; margin-top: .4rem; }
 
+  /* ---------- AGs ---------- */
+  .ag-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
+  @media (max-width: 900px) { .ag-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .ag-grid { grid-template-columns: 1fr; } }
+  .ag-list { list-style: none; padding: 0; margin: .8rem 0 0; display: grid; gap: .4rem; }
+  .ag-list li { color: var(--muted); font-size: .93rem; padding-left: 1.05rem; position: relative; }
+  .ag-list li::before { content: ""; position: absolute; left: 0; top: .6em; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+  .ag-note { margin-top: 1.8rem; color: var(--muted); font-size: .9rem; display: inline-flex; align-items: center; gap: .5rem; }
+  .ag-note svg { width: 1.05em; height: 1.05em; color: var(--primary); flex: none; }
+
   /* ---------- CTA band ---------- */
   .cta-band {
     background: linear-gradient(155deg, var(--primary-deep), var(--primary));
@@ -322,6 +332,7 @@
     <nav class="nav-links" aria-label="Hauptnavigation">
       <a href="#warum">Warum wir</a>
       <a href="#profil">Schulprofil</a>
+      <a href="#ags">AGs</a>
       <a href="#anmeldung">Anmeldung</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
@@ -452,8 +463,82 @@
     </div>
   </section>
 
+  <!-- ===== AGs ===== -->
+  <section class="band band-alt" id="ags">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Ganztag &amp; AGs</span>
+        <h2>Für jedes Kind das Richtige.</h2>
+        <p>An drei Nachmittagen (Mo–Mi) wählt dein Kind aus einem vielfältigen Programm — vom Sport bis zur Bühne. Jedes Halbjahr stellen wir es neu zusammen.</p>
+      </div>
+      <div class="ag-grid">
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 000 18M3.5 9h17M3.5 15h17"/></svg></div>
+          <h3>Sport &amp; Bewegung</h3>
+          <ul class="ag-list">
+            <li>Fußball &amp; Mädchen-Fußball</li>
+            <li>Handball</li>
+            <li>Tischtennis, Badminton, Pickleball</li>
+            <li>Selbstverteidigung</li>
+            <li>Outdoor-Sport, Kicker &amp; Billard</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 100 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.2 0-.8.7-1.5 1.5-1.5H17a4 4 0 004-4c0-3.9-4-7-9-7z"/><circle cx="7.5" cy="11" r="1"/><circle cx="12" cy="8" r="1"/><circle cx="16.5" cy="11" r="1"/></svg></div>
+          <h3>Kunst &amp; Gestalten</h3>
+          <ul class="ag-list">
+            <li>Kunst &amp; Werken</li>
+            <li>Comics entwickeln und zeichnen</li>
+            <li>Grafik-Design</li>
+            <li>Basteln &amp; Upcycling</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+          <h3>Musik, Tanz &amp; Bühne</h3>
+          <ul class="ag-list">
+            <li>Bläser-AG</li>
+            <li>Orientalischer Tanz</li>
+            <li>Schattentheater</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4-2 8-6 8-11a8 8 0 00-8-3 8 8 0 00-8 3c0 5 4 9 8 11z"/><path d="M12 8v14"/></svg></div>
+          <h3>Natur &amp; Miteinander</h3>
+          <ul class="ag-list">
+            <li>Garten-AG</li>
+            <li>Altenheim-AG</li>
+            <li>Basteln mit Naturmaterialien</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 012-2h6v16H6a2 2 0 00-2 2zM20 5a2 2 0 00-2-2h-6v16h6a2 2 0 012 2z"/></svg></div>
+          <h3>Sprache &amp; Lesen</h3>
+          <ul class="ag-list">
+            <li>Schreib- und Lesewerkstatt</li>
+            <li>Anime &amp; Englisch</li>
+            <li>Bücherei</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6a1 1 0 011-1h6v14M13 19V5h6a1 1 0 011 1v13M3 19h18"/></svg></div>
+          <h3>Lernen &amp; Entspannung</h3>
+          <ul class="ag-list">
+            <li>Hausaufgabenbetreuung</li>
+            <li>Mathe-Förderung (Kl. 6/7)</li>
+            <li>Entspannung</li>
+          </ul>
+        </article>
+      </div>
+      <span class="ag-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        Auszug aus unserem aktuellen Programm — das AG-Angebot wechselt jedes Halbjahr.
+      </span>
+    </div>
+  </section>
+
   <!-- ===== ANMELDUNG ===== -->
-  <section class="band band-alt" id="anmeldung">
+  <section class="band" id="anmeldung">
     <div class="wrap">
       <div class="sec-head">
         <span class="eyebrow">In vier Schritten zur Anmeldung</span>
