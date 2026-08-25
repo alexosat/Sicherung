@@ -4,13 +4,16 @@ Neue Landingpage für Interessenten der Schule (Domain: `obs-doerverden.de`).
 
 ## Status
 
-**Prototyp / Entwurf.** Design und Texte sind in Abstimmung. Logo, Fotos, Karte
-und einzelne Zahlen sind noch Platzhalter.
+**Prototyp / Entwurf.** Design und Texte sind in Abstimmung. Fotos und Karte
+sind noch Platzhalter. Das offizielle Schullogo ist eingebunden.
 
 ## Dateien
 
 - `index.html` — eigenständige Landingpage (HTML + CSS + wenig JS, keine externen
   Abhängigkeiten außer Google Fonts). Hell- und Dunkelmodus, barrierefrei angelegt.
+  Das Logo ist als Bild eingebettet (Data-URI), damit die Datei eigenständig bleibt.
+- `aw_logo.png` — offizielles Logo (Bildmarke + Wortmarke), transparent.
+- `aw_logo_mark.png` — nur die Bildmarke, transparent (im Header/Footer verwendet).
 
 ## Vorschau
 
