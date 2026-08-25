@@ -21,6 +21,10 @@
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     function mobile() { return window.matchMedia("(max-width: 760px)").matches; }
 
+    // Skript ist aktiv: Fallback-Linie ausblenden; bei Bewegung erlaubt zusätzlich animieren.
+    track.classList.add("ready");
+    if (!reduce) track.classList.add("anim");
+
     var nodes = items.map(function () {
       var n = document.createElement("div");
       n.className = "news-node";

@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.0.0
+Version: 1.1.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -175,17 +175,22 @@ a{ color: var(--c-primary); }
 
 /* ---------- Aktuelles: Fluss-Zeitstrahl ---------- */
 .news-track { position: relative; margin-top: 2.8rem; }
+/* Fallback-Linie (falls das Skript nicht/erst später lädt) */
+.news-track::after { content: ""; position: absolute; left: 50%; transform: translateX(-50%); top: 0; bottom: 0; width: 3px; background: var(--c-line); border-radius: 3px; z-index: 0; }
+.news-track.ready::after { content: none; }
 .news-river { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: visible; }
 .news-river .base { stroke: var(--c-line); stroke-width: 4; fill: none; }
 .news-river .draw { stroke: var(--c-primary); stroke-width: 4; fill: none; stroke-linecap: round; }
 .news-head { position: absolute; width: 15px; height: 15px; border-radius: 50%; background: var(--c-primary); transform: translate(-50%, -50%); z-index: 3; opacity: 0; box-shadow: 0 0 0 6px color-mix(in srgb, var(--c-primary) 22%, transparent); }
 .news-nodes { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
-.news-node { position: absolute; width: 16px; height: 16px; border-radius: 50%; background: var(--c-surface); border: 3px solid var(--c-primary); transform: translate(-50%, -50%) scale(.4); opacity: 0; transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s; }
-.news-node.in { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+.news-node { position: absolute; width: 16px; height: 16px; border-radius: 50%; background: var(--c-surface); border: 3px solid var(--c-primary); transform: translate(-50%, -50%); transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s; }
+.news-track.anim .news-node { opacity: 0; transform: translate(-50%, -50%) scale(.4); }
+.news-track.anim .news-node.in { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 .news-list { position: relative; z-index: 1; display: grid; gap: clamp(1.6rem, 4vw, 3.2rem); }
 .news-item { display: grid; grid-template-columns: 1fr 120px 1fr; align-items: center; }
-.news-card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--aws-radius); box-shadow: var(--aws-shadow-sm); padding: 1.3rem 1.4rem !important; max-width: 400px; opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s ease, box-shadow .2s ease; }
-.news-item.in .news-card { opacity: 1; transform: none; }
+.news-card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--aws-radius); box-shadow: var(--aws-shadow-sm); padding: 1.3rem 1.4rem !important; max-width: 400px; transition: opacity .6s ease, transform .6s ease, box-shadow .2s ease; }
+.news-track.anim .news-card { opacity: 0; transform: translateY(26px); }
+.news-track.anim .news-item.in .news-card { opacity: 1; transform: none; }
 .news-card:hover { box-shadow: var(--aws-shadow); }
 .news-item:nth-child(odd) .news-card { grid-column: 1; justify-self: end; }
 .news-item:nth-child(even) .news-card { grid-column: 3; justify-self: start; }
@@ -198,6 +203,7 @@ a{ color: var(--c-primary); }
 .news-cta { justify-content: center; margin-top: 2.8rem !important; position: relative; z-index: 1; }
 @media (max-width: 760px) {
   .news-river { display: none; }
+  .news-track::after { content: none; }
   .news-track::before { content: ""; position: absolute; left: 9px; top: 0; bottom: 0; width: 3px; background: var(--c-line); border-radius: 3px; }
   .news-item { grid-template-columns: 1fr; padding-left: 2.4rem; }
   .news-item:nth-child(odd) .news-card, .news-item:nth-child(even) .news-card { grid-column: 1; justify-self: stretch; max-width: none; }
