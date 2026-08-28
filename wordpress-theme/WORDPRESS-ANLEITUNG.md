@@ -49,6 +49,12 @@ Für jede der drei Seiten:
   löschen, an gleicher Stelle einen **Bild-Block** einfügen und ein Foto hochladen.
 - **Anmelde-Button:** verlinkt bereits auf `https://anmeldung.obs-doerverden.de`.
 
+### Hell-/Dunkelmodus
+
+Im Kopfbereich gibt es einen runden Umschalt-Button (Sonne/Mond). Besucher können
+damit zwischen heller und dunkler Ansicht wechseln; die Wahl wird im Browser gemerkt.
+Standard ist die helle Ansicht (bzw. die Systemeinstellung der Besucher).
+
 ### Termine im Bereich „Aktuelles" pflegen
 
 Der Fluss-Zeitstrahl im Abschnitt **Aktuelles** besteht aus Karten (Block „news-item").
