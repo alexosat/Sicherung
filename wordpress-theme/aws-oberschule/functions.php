@@ -46,6 +46,14 @@ if ( ! function_exists( 'aws_enqueue' ) ) {
 			wp_get_theme()->get( 'Version' ),
 			false
 		);
+		// Kopfleiste schrumpft beim Scrollen.
+		wp_enqueue_script(
+			'aws-header-scroll',
+			get_theme_file_uri( 'assets/js/header-scroll.js' ),
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			true
+		);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'aws_enqueue' );

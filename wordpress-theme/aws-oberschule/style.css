@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.3.0
+Version: 1.4.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -72,18 +72,38 @@ a{ color: var(--c-primary); }
 .wp-block-button.aws-btn-ghost .wp-block-button__link:hover{ border-color:var(--c-primary); color:var(--c-primary); transform:translateY(-2px); }
 
 /* ---------- Header ---------- */
-.aws-header{ position:sticky; top:0; z-index:50; background:color-mix(in srgb, var(--c-bg) 82%, transparent); backdrop-filter:blur(12px); border-bottom:1px solid var(--c-line); }
-.aws-nav{ width:100%; max-width:1180px; margin-inline:auto; padding: .7rem clamp(1.1rem,4vw,2.2rem); }
-.aws-brand{ text-decoration:none; }
-.aws-brand .wp-block-site-logo img{ height:42px; width:auto; }
-.aws-brand-name{ font-family: var(--wp--preset--font-family--fraunces); font-weight:600; font-size:1.05rem; color:var(--c-ink); line-height:1.1; }
-.aws-brand-sub{ font-size:.72rem; color:var(--c-muted); letter-spacing:.03em; margin:0; }
-.aws-nav .wp-block-navigation{ font-size:.96rem; }
-.aws-nav .wp-block-navigation a{ color:var(--c-muted); font-weight:500; }
+.aws-header{ position:sticky; top:0; z-index:50; background:color-mix(in srgb, var(--c-bg) 85%, transparent); backdrop-filter:blur(12px); border-bottom:1px solid var(--c-line); transition:box-shadow .3s ease, background .3s ease; }
+.aws-header.scrolled{ box-shadow:0 8px 26px -16px rgba(18,42,44,.35); background:color-mix(in srgb, var(--c-bg) 93%, transparent); }
+.aws-nav{ width:100%; max-width:1220px; margin-inline:auto; padding:1.25rem clamp(1.1rem,4vw,2.2rem); gap:1.6rem; transition:padding .3s ease; }
+.aws-header.scrolled .aws-nav{ padding-block:.7rem; }
+.aws-brand{ text-decoration:none; gap:.85rem; }
+.aws-brand .wp-block-site-logo{ width:auto !important; }
+.aws-brand .wp-block-site-logo img{ height:60px !important; width:auto !important; max-width:none; transition:height .3s ease; }
+.aws-header.scrolled .aws-brand .wp-block-site-logo img{ height:46px !important; }
+.aws-brand-name{ font-family: var(--wp--preset--font-family--fraunces); font-weight:600; font-size:1.35rem; color:var(--c-ink); line-height:1.1; }
+.aws-brand-sub{ font-size:.82rem; color:var(--c-muted); letter-spacing:.03em; margin:0; }
+.aws-nav .wp-block-navigation{ font-size:1.08rem; }
+.aws-nav .wp-block-navigation a{ color:var(--c-muted); font-weight:500; position:relative; padding-block:.35rem; transition:color .2s ease; }
+.aws-nav .wp-block-navigation a::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--c-primary); border-radius:2px; transform:scaleX(0); transform-origin:left center; transition:transform .28s cubic-bezier(.2,.8,.2,1); }
 .aws-nav .wp-block-navigation a:hover{ color:var(--c-ink); }
-.aws-theme-toggle{ width:40px; height:40px; border-radius:50%; border:1px solid var(--c-line); background:var(--c-surface); color:var(--c-ink); cursor:pointer; display:grid; place-items:center; padding:0; transition:border-color .15s, transform .15s; }
-.aws-theme-toggle:hover{ border-color:var(--c-primary); transform:translateY(-1px); }
-.aws-theme-toggle svg{ width:18px; height:18px; }
+.aws-nav .wp-block-navigation a:hover::after{ transform:scaleX(1); }
+.aws-nav .wp-block-button__link{ font-size:1.02rem; padding:.85rem 1.7rem; }
+/* Lebendiges Einblenden der Kopfleiste */
+@media (prefers-reduced-motion: no-preference){
+  .aws-nav > *{ animation: aws-nav-in .5s ease both; }
+  .aws-nav > *:nth-child(2){ animation-delay:.06s; }
+  .aws-nav > *:nth-child(3){ animation-delay:.12s; }
+  .aws-nav > *:nth-child(4){ animation-delay:.18s; }
+  @keyframes aws-nav-in{ from{ opacity:0; transform:translateY(-10px);} to{ opacity:1; transform:none; } }
+}
+@media (max-width: 600px){
+  .aws-brand .wp-block-site-logo img{ height:46px !important; }
+  .aws-brand-name{ font-size:1.15rem; }
+  .aws-nav{ padding-block:.9rem; }
+}
+.aws-theme-toggle{ width:44px; height:44px; border-radius:50%; border:1px solid var(--c-line); background:var(--c-surface); color:var(--c-ink); cursor:pointer; display:grid; place-items:center; padding:0; transition:border-color .15s, transform .15s; }
+.aws-theme-toggle:hover{ border-color:var(--c-primary); transform:translateY(-1px) rotate(-8deg); }
+.aws-theme-toggle svg{ width:20px; height:20px; }
 .aws-theme-toggle .icon-moon{ display:none; }
 :root[data-theme="dark"] .aws-theme-toggle .icon-sun{ display:none; }
 :root[data-theme="dark"] .aws-theme-toggle .icon-moon{ display:block; }
@@ -248,4 +268,4 @@ a{ color: var(--c-primary); }
 
 /* ---------- Accessibility ---------- */
 a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:focus-visible{ outline:3px solid var(--c-primary); outline-offset:3px; border-radius:6px; }
-@media(prefers-reduced-motion: reduce){ *{ scroll-behavior:auto !important; } .aws-card{ transition:none; } }
+@media(prefers-reduced-motion: reduce){ *{ scroll-behavior:auto !important; } .aws-card{ transition:none; } .aws-header, .aws-nav, .aws-brand .wp-block-site-logo img, .aws-nav .wp-block-navigation a, .aws-nav .wp-block-navigation a::after, .aws-theme-toggle{ transition:none; } .aws-nav > *{ animation:none; } }
