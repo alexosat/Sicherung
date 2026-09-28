@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.13.0
+Version: 1.14.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -296,7 +296,12 @@ a{ color: var(--c-primary); }
 .news-card .wp-block-post-excerpt{ margin:.5rem 0 0; }
 .news-card .wp-block-post-excerpt p{ color:var(--c-muted); font-size:.94rem; margin:0; }
 .news-card .wp-block-post-excerpt__more-link{ display:inline-block; margin-top:.5rem; color:var(--c-primary); font-weight:600; font-size:.9rem; }
-.news-list .wp-block-query-no-results{ text-align:center; color:var(--c-muted); position:relative; z-index:1; }
+.news-list .wp-block-query-no-results{ position:relative; z-index:1; max-width:640px; margin:0 auto; text-align:center; color:var(--c-muted); background:var(--c-surface); border:1px dashed var(--c-line); border-radius:var(--aws-radius); padding:2.2rem 1.6rem; }
+/* Leer-Zustand: keine Beitraege -> Fluss/Knoten/Fallback-Linie ausblenden */
+.news-track.is-empty::after{ content:none; }
+.news-track.is-empty .news-river,
+.news-track.is-empty .news-nodes,
+.news-track.is-empty .news-head{ display:none; }
 @media (max-width: 760px){
   .news-list .wp-block-post{ grid-template-columns:1fr; padding-left:2.4rem; }
   .news-list .wp-block-post:nth-child(odd) .news-card,
