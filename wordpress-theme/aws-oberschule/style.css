@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.4.1
+Version: 1.5.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -31,16 +31,16 @@ Text Domain: aws-oberschule
 
 /* Dunkelmodus (per Umschalter) – überschreibt die Farbwerte, alles andere folgt automatisch */
 :root[data-theme="dark"]{
-  --wp--preset--color--base: #0E1A21;
-  --wp--preset--color--surface: #14232B;
-  --wp--preset--color--surface-2: #1A2C34;
-  --wp--preset--color--contrast: #E9F0F2;
-  --wp--preset--color--muted: #93A6AD;
-  --wp--preset--color--line: #223842;
-  --wp--preset--color--primary: #4FA3D8;
-  --wp--preset--color--primary-deep: #2E7FB4;
-  --wp--preset--color--primary-soft: #143040;
-  --wp--preset--color--accent: #5FB4A8;
+  --wp--preset--color--base: #0E1A22;
+  --wp--preset--color--surface: #14242E;
+  --wp--preset--color--surface-2: #1A2E38;
+  --wp--preset--color--contrast: #E9F1F4;
+  --wp--preset--color--muted: #93A9B2;
+  --wp--preset--color--line: #243A45;
+  --wp--preset--color--primary: #4FB3E0;
+  --wp--preset--color--primary-deep: #2E86B8;
+  --wp--preset--color--primary-soft: #123043;
+  --wp--preset--color--accent: #3FD0DE;
 }
 
 body{ background: var(--c-bg); color: var(--c-ink); }
@@ -123,7 +123,7 @@ a{ color: var(--c-primary); }
 .aws-hero-bg{ position:absolute; inset:0; z-index:0; pointer-events:none; }
 .aws-hero-bg svg{ width:100%; height:100%; display:block; }
 .aws-hero .aws-inner{ position:relative; z-index:1; }
-.aws-hero h1{ font-size: clamp(2.7rem, 2rem + 3.4vw, 4.4rem); font-weight:600; margin:0; }
+.aws-hero h1{ font-size: clamp(2.1rem, 1.6rem + 2.3vw, 3.4rem); font-weight:600; margin:0; }
 .aws-hero h1 em{ font-style:italic; color:var(--c-primary); }
 .aws-hero-lede{ font-size:1.3rem; color:var(--c-muted); max-width:34ch; line-height:1.5; margin:1.3rem 0 0; }
 .aws-hero-meta{ color:var(--c-muted); font-size:.9rem; margin:2rem 0 0; }
@@ -275,3 +275,36 @@ a{ color: var(--c-primary); }
 /* ---------- Accessibility ---------- */
 a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:focus-visible{ outline:3px solid var(--c-primary); outline-offset:3px; border-radius:6px; }
 @media(prefers-reduced-motion: reduce){ *{ scroll-behavior:auto !important; } .aws-card{ transition:none; } .aws-header, .aws-nav, .aws-brand .wp-block-site-logo img, .aws-nav .wp-block-navigation a, .aws-nav .wp-block-navigation a::after, .aws-theme-toggle{ transition:none; } .aws-nav > *{ animation:none; } }
+
+/* ---------- Kopf: Masthead mit flachem ∪-Bogen (ersetzt Menuezeile) ---------- */
+.aws-header{ position:relative; top:auto; background:transparent; backdrop-filter:none; border-bottom:none; box-shadow:none; }
+.masthead{ position:relative; padding:1rem 0 0; }
+.masthead .arc{ position:relative; width:100%; max-width:1160px; height:300px; margin:0 auto; }
+.arc-line{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+.arc-line path{ fill:none; stroke-width:3; stroke-linecap:round; }
+.masthead-brand{ position:absolute; top:4px; left:50%; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:.3rem; text-decoration:none; text-align:center; }
+.masthead-brand .wp-block-site-logo{ width:auto !important; }
+.masthead-brand .wp-block-site-logo img{ height:78px !important; width:auto !important; max-width:none; }
+.masthead-name{ font-family:var(--wp--preset--font-family--fraunces); font-weight:600; font-size:clamp(1.5rem,1.1rem+1.3vw,2.2rem); color:var(--c-ink); line-height:1.05; }
+.masthead-sub{ font-size:.92rem; color:var(--c-muted); letter-spacing:.03em; }
+.arc-item{ position:absolute; transform:translate(-50%,-50%); text-decoration:none; opacity:0; }
+.arc-btn{ width:66px; height:66px; border-radius:50%; background:var(--c-surface); border:1px solid var(--c-line); box-shadow:var(--aws-shadow-sm); display:grid; place-items:center; color:var(--c-primary); transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s, border-color .25s, background .25s; }
+.arc-btn svg{ width:28px; height:28px; }
+.arc-label{ position:absolute; top:calc(100% + .55rem); left:50%; transform:translateX(-50%); font-size:.95rem; font-weight:600; color:var(--c-ink); white-space:nowrap; transition:color .2s; }
+.arc-item.edge .arc-label{ top:auto; bottom:calc(100% + .55rem); }
+.arc-item:hover .arc-btn{ transform:translateY(-6px) scale(1.08); box-shadow:var(--aws-shadow); border-color:var(--c-primary); background:var(--c-primary-soft); }
+.arc-item:hover .arc-label{ color:var(--c-primary); }
+.arc-item:focus-visible .arc-btn{ outline:3px solid var(--c-primary); outline-offset:3px; }
+.arc.in .arc-item{ animation:arc-pop .55s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes arc-pop{ from{ opacity:0; transform:translate(-50%,-50%) scale(.3); } to{ opacity:1; transform:translate(-50%,-50%) scale(1); } }
+@media (prefers-reduced-motion: no-preference){ .arc.in .arc-btn svg{ animation:arc-float 5s ease-in-out infinite; } }
+@keyframes arc-float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
+.aws-float-toggle{ position:fixed; top:16px; right:16px; z-index:60; box-shadow:var(--aws-shadow-sm); }
+@media (max-width:700px){
+  .masthead .arc{ height:auto; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:1.3rem 1.5rem; padding:1rem 0; }
+  .masthead-brand{ position:static; transform:none; flex-basis:100%; margin-bottom:.4rem; }
+  .arc-item{ position:static; transform:none; display:flex; flex-direction:column; align-items:center; gap:.5rem; }
+  .arc-item .arc-label, .arc-item.edge .arc-label{ position:static; transform:none; top:auto; bottom:auto; }
+  .arc-line{ display:none; }
+}
+@media (prefers-reduced-motion: reduce){ .arc-item{ opacity:1; } .arc.in .arc-item{ animation:none; } .arc-btn{ transition:none; } }

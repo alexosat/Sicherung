@@ -9,16 +9,16 @@
       "defaultPalette": false,
       "custom": true,
       "palette": [
-        { "slug": "base", "color": "#F3F6F7", "name": "Hintergrund" },
+        { "slug": "base", "color": "#F1F6F8", "name": "Hintergrund" },
         { "slug": "surface", "color": "#FFFFFF", "name": "Fläche" },
-        { "slug": "surface-2", "color": "#E9EEF1", "name": "Fläche gedämpft" },
+        { "slug": "surface-2", "color": "#E4EEF3", "name": "Fläche gedämpft" },
         { "slug": "contrast", "color": "#22323A", "name": "Text" },
         { "slug": "muted", "color": "#5A6B73", "name": "Text gedämpft" },
-        { "slug": "line", "color": "#DCE5E9", "name": "Linie" },
-        { "slug": "primary", "color": "#1B6CA3", "name": "Blau (Primär)" },
-        { "slug": "primary-deep", "color": "#145480", "name": "Blau dunkel" },
-        { "slug": "primary-soft", "color": "#E1EDF6", "name": "Blau hell" },
-        { "slug": "accent", "color": "#3C8C81", "name": "Grün-Teal" }
+        { "slug": "line", "color": "#D4E3EA", "name": "Linie" },
+        { "slug": "primary", "color": "#0F5FA8", "name": "Blau (Primär)" },
+        { "slug": "primary-deep", "color": "#0B4680", "name": "Blau dunkel" },
+        { "slug": "primary-soft", "color": "#DEEAF7", "name": "Blau hell" },
+        { "slug": "accent", "color": "#10B3C2", "name": "Grün-Teal" }
       ]
     },
     "typography": {

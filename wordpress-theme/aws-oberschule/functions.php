@@ -46,10 +46,10 @@ if ( ! function_exists( 'aws_enqueue' ) ) {
 			wp_get_theme()->get( 'Version' ),
 			false
 		);
-		// Kopfleiste schrumpft beim Scrollen.
+		// Kopf-Bogen (Masthead): Icon-Buttons auf dem Bogen platzieren + einblenden.
 		wp_enqueue_script(
-			'aws-header-scroll',
-			get_theme_file_uri( 'assets/js/header-scroll.js' ),
+			'aws-masthead-arc',
+			get_theme_file_uri( 'assets/js/masthead-arc.js' ),
 			array(),
 			wp_get_theme()->get( 'Version' ),
 			true
