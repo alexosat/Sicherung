@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.15.1
+Version: 1.16.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -207,6 +207,22 @@ a{ color: var(--c-primary); }
 .aws-cta .aws-btn-primary .wp-block-button__link:hover{ background:#eef7f7; }
 .aws-cta .aws-btn-ghost .wp-block-button__link{ color:#fff; border-color:rgba(255,255,255,.55); }
 .aws-cta .aws-btn-ghost .wp-block-button__link:hover{ border-color:#fff; background:rgba(255,255,255,.12); }
+
+/* ---------- Förderverein ---------- */
+.aws-foerder{ max-width:840px; margin-inline:auto; text-align:center; position:relative;
+  background:linear-gradient(150deg, var(--c-primary-soft), color-mix(in srgb, var(--c-accent) 16%, var(--c-surface)));
+  border:1px solid var(--c-line); border-radius:var(--aws-radius); box-shadow:var(--aws-shadow);
+  padding: clamp(2rem, 4vw, 3.4rem) !important; }
+.aws-foerder .aws-eyebrow{ justify-content:center; }
+.aws-foerder-icon{ width:66px; height:66px; border-radius:50%; background:var(--c-surface); border:1px solid var(--c-line); display:grid; place-items:center; margin:0 auto 1.2rem; color:var(--c-primary); box-shadow:var(--aws-shadow-sm); }
+.aws-foerder-icon svg{ width:32px; height:32px; }
+.aws-foerder h2{ font-size:clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); margin:0; }
+.aws-foerder p:not(.aws-eyebrow):not(.aws-foerder-meta){ color:var(--c-muted); font-size:1.15rem; line-height:1.55; margin:.9rem auto 0; max-width:58ch; }
+.aws-foerder-list{ list-style:none; margin:1.5rem auto 0; padding:0; display:flex; flex-wrap:wrap; gap:.6rem .7rem; justify-content:center; max-width:640px; }
+.aws-foerder-list li{ background:var(--c-surface); border:1px solid var(--c-line); border-radius:100px; padding:.45rem 1rem; font-size:.92rem; color:var(--c-ink); display:inline-flex; align-items:center; gap:.45rem; }
+.aws-foerder-list li::before{ content:"✓"; color:var(--c-primary); font-weight:700; }
+.aws-foerder .wp-block-buttons{ display:flex; flex-wrap:wrap; gap:.8rem; justify-content:center; margin-top:1.7rem; }
+.aws-foerder-meta{ font-size:.85rem; color:var(--c-muted); margin-top:1.3rem !important; }
 
 /* ---------- Contact ---------- */
 .aws-contact-list{ list-style:none; padding:0; margin:1.4rem 0 0; display:grid; gap:1.1rem; }
