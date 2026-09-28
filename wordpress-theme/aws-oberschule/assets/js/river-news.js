@@ -16,7 +16,9 @@
     var head = document.getElementById("newsHead");
     var nodesLayer = document.getElementById("newsNodes");
     if (!svg || !base || !draw || !nodesLayer) return;
-    var items = Array.prototype.slice.call(track.querySelectorAll(".news-item"));
+    // Beiträge aus dem Query-Loop (.wp-block-post) oder – als Fallback – feste .news-item
+    var items = Array.prototype.slice.call(track.querySelectorAll(".news-list .wp-block-post"));
+    if (!items.length) items = Array.prototype.slice.call(track.querySelectorAll(".news-item"));
     if (!items.length) return;
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     function mobile() { return window.matchMedia("(max-width: 760px)").matches; }
