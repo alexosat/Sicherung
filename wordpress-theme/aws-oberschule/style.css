@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.4.0
+Version: 1.4.1
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -74,16 +74,17 @@ a{ color: var(--c-primary); }
 /* ---------- Header ---------- */
 .aws-header{ position:sticky; top:0; z-index:50; background:color-mix(in srgb, var(--c-bg) 85%, transparent); backdrop-filter:blur(12px); border-bottom:1px solid var(--c-line); transition:box-shadow .3s ease, background .3s ease; }
 .aws-header.scrolled{ box-shadow:0 8px 26px -16px rgba(18,42,44,.35); background:color-mix(in srgb, var(--c-bg) 93%, transparent); }
-.aws-nav{ width:100%; max-width:1220px; margin-inline:auto; padding:1.25rem clamp(1.1rem,4vw,2.2rem); gap:1.6rem; transition:padding .3s ease; }
+.aws-nav{ width:100%; max-width:1220px; margin-inline:auto; padding:1.25rem clamp(1.1rem,4vw,2.2rem); gap:1.15rem; transition:padding .3s ease; }
 .aws-header.scrolled .aws-nav{ padding-block:.7rem; }
-.aws-brand{ text-decoration:none; gap:.85rem; }
+.aws-brand{ text-decoration:none; gap:.85rem; flex:none; }
 .aws-brand .wp-block-site-logo{ width:auto !important; }
 .aws-brand .wp-block-site-logo img{ height:60px !important; width:auto !important; max-width:none; transition:height .3s ease; }
 .aws-header.scrolled .aws-brand .wp-block-site-logo img{ height:46px !important; }
-.aws-brand-name{ font-family: var(--wp--preset--font-family--fraunces); font-weight:600; font-size:1.35rem; color:var(--c-ink); line-height:1.1; }
-.aws-brand-sub{ font-size:.82rem; color:var(--c-muted); letter-spacing:.03em; margin:0; }
-.aws-nav .wp-block-navigation{ font-size:1.08rem; }
-.aws-nav .wp-block-navigation a{ color:var(--c-muted); font-weight:500; position:relative; padding-block:.35rem; transition:color .2s ease; }
+.aws-brand-name{ font-family: var(--wp--preset--font-family--fraunces); font-weight:600; font-size:1.3rem; color:var(--c-ink); line-height:1.1; white-space:nowrap; }
+.aws-brand-sub{ font-size:.82rem; color:var(--c-muted); letter-spacing:.03em; margin:0; white-space:nowrap; }
+.aws-nav .wp-block-navigation{ font-size:1.04rem; flex-wrap:nowrap; }
+.aws-nav .wp-block-navigation .wp-block-navigation__container{ flex-wrap:nowrap; gap:clamp(.8rem, 1.4vw, 1.3rem); }
+.aws-nav .wp-block-navigation a{ color:var(--c-muted); font-weight:500; position:relative; padding-block:.35rem; white-space:nowrap; transition:color .2s ease; }
 .aws-nav .wp-block-navigation a::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--c-primary); border-radius:2px; transform:scaleX(0); transform-origin:left center; transition:transform .28s cubic-bezier(.2,.8,.2,1); }
 .aws-nav .wp-block-navigation a:hover{ color:var(--c-ink); }
 .aws-nav .wp-block-navigation a:hover::after{ transform:scaleX(1); }
@@ -95,6 +96,11 @@ a{ color: var(--c-primary); }
   .aws-nav > *:nth-child(3){ animation-delay:.12s; }
   .aws-nav > *:nth-child(4){ animation-delay:.18s; }
   @keyframes aws-nav-in{ from{ opacity:0; transform:translateY(-10px);} to{ opacity:1; transform:none; } }
+}
+@media (max-width: 1120px){
+  .aws-brand-sub{ display:none; }
+  .aws-nav{ gap:1rem; }
+  .aws-nav .wp-block-navigation{ font-size:1rem; }
 }
 @media (max-width: 600px){
   .aws-brand .wp-block-site-logo img{ height:46px !important; }
