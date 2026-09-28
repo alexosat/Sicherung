@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.5.6
+Version: 1.6.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -325,3 +325,90 @@ a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:fo
 .masthead-brand{ gap:.35rem; }
 .masthead-brand > *{ margin-block:0 !important; }
 .masthead-brand .wp-block-site-logo{ margin:0 !important; }
+
+/* =====================================================================
+   3D / Liquid-Glass-Effekte (iOS-Optik)
+   Halbtransparente Flaechen mit Unschaerfe, Lichtkante und Tiefe.
+   ===================================================================== */
+:root{
+  --glass-blur: 18px;
+  --glass-sat: 165%;
+  --glass-bg:        color-mix(in srgb, var(--c-surface) 60%, transparent);
+  --glass-bg-strong: color-mix(in srgb, var(--c-surface) 78%, transparent);
+  --glass-hairline:  color-mix(in srgb, #ffffff 34%, var(--c-line));   /* zarte Umrandung */
+  --glass-edge:      color-mix(in srgb, #ffffff 70%, transparent);     /* helle Lichtkante oben */
+  --glass-sheen:     linear-gradient(180deg, color-mix(in srgb, #ffffff 42%, transparent), transparent 44%);
+  --glass-shadow:    0 10px 30px -12px rgba(18,42,44,.30), 0 2px 6px -4px rgba(18,42,44,.18);
+  --glass-shadow-hi: 0 22px 48px -16px rgba(18,42,44,.40), 0 4px 12px -6px rgba(18,42,44,.24);
+}
+:root[data-theme="dark"]{
+  --glass-bg:        color-mix(in srgb, var(--c-surface) 50%, transparent);
+  --glass-bg-strong: color-mix(in srgb, var(--c-surface) 70%, transparent);
+  --glass-hairline:  color-mix(in srgb, #ffffff 14%, var(--c-line));
+  --glass-edge:      color-mix(in srgb, #ffffff 22%, transparent);
+  --glass-sheen:     linear-gradient(180deg, color-mix(in srgb, #ffffff 12%, transparent), transparent 44%);
+  --glass-shadow:    0 12px 34px -12px rgba(0,0,0,.55), 0 2px 8px -4px rgba(0,0,0,.45);
+  --glass-shadow-hi: 0 24px 52px -16px rgba(0,0,0,.65), 0 5px 14px -6px rgba(0,0,0,.55);
+}
+
+/* Sanfte Farb-Auren hinter den Abschnitten -> Tiefe fuer die Unschaerfe */
+.aws-section{ position:relative; }
+.aws-section > .aws-inner{ position:relative; z-index:1; }
+.aws-section::before{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(40% 55% at 12% 16%, color-mix(in srgb, var(--c-primary) 16%, transparent), transparent 70%),
+    radial-gradient(36% 52% at 88% 84%, color-mix(in srgb, var(--c-accent)  16%, transparent), transparent 70%);
+  opacity:.75;
+}
+/* dezente Aura auch hinter dem Kopf-Bogen */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(55% 45% at 18% 0%,  color-mix(in srgb, var(--c-primary) 12%, transparent), transparent 60%),
+    radial-gradient(45% 40% at 100% 12%, color-mix(in srgb, var(--c-accent)  12%, transparent), transparent 60%);
+}
+
+/* Glas-Flaechen */
+.aws-card,
+.aws-step,
+.news-card,
+.aws-hero-card,
+.aws-legal .aws-block{
+  background: var(--glass-sheen), var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border: 1px solid var(--glass-hairline);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-edge);
+}
+.aws-card:hover,
+.news-card:hover{
+  box-shadow: var(--glass-shadow-hi), inset 0 1px 0 var(--glass-edge);
+  border-color: color-mix(in srgb, var(--c-primary) 40%, var(--glass-hairline));
+}
+
+/* Schwebende Rund-Buttons (Kopf-Bogen + Umschalter) als kleines Glas */
+.arc-btn,
+.aws-theme-toggle{
+  background: var(--glass-sheen), var(--glass-bg-strong);
+  -webkit-backdrop-filter: blur(14px) saturate(var(--glass-sat));
+  backdrop-filter: blur(14px) saturate(var(--glass-sat));
+  border: 1px solid var(--glass-hairline);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-edge);
+}
+
+/* Fallback: kein backdrop-filter -> solide Flaechen (Look wie zuvor) */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))){
+  .aws-card, .aws-step, .news-card, .aws-hero-card, .aws-legal .aws-block,
+  .arc-btn, .aws-theme-toggle{ background: var(--c-surface); }
+}
+
+/* Barrierefreiheit: weniger Transparenz -> solide Flaechen, keine Auren */
+@media (prefers-reduced-transparency: reduce){
+  .aws-card, .aws-step, .news-card, .aws-hero-card, .aws-legal .aws-block,
+  .arc-btn, .aws-theme-toggle{
+    background: var(--c-surface);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .aws-section::before, body::before{ display:none; }
+}
