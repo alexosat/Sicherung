@@ -23,9 +23,9 @@
       if (svg) svg.style.display = "";
       var W = arc.clientWidth, H = arc.clientHeight;
       if (svg) svg.setAttribute("viewBox", "0 0 " + W + " " + H);
-      var cx = W / 2, top = 92;
+      var cx = W / 2, top = 140;
       var Rx = W / 2 - 96;                    // breit
-      var Ry = Math.min(120, H - top - 92);   // flach
+      var Ry = Math.min(120, H - top - 70);   // flach, mit Freiraum
       var n = items.length, d = "";
       for (var s = 0; s <= 80; s++) {
         var aa = Math.PI * (1 - s / 80);

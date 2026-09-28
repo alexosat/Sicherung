@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.5.4
+Version: 1.5.5
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -279,13 +279,13 @@ a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:fo
 /* ---------- Kopf: Masthead mit flachem ∪-Bogen (ersetzt Menuezeile) ---------- */
 .aws-header{ position:relative; top:auto; background:transparent; backdrop-filter:none; border-bottom:none; box-shadow:none; }
 .masthead{ position:relative; padding:1rem 0 0; }
-.masthead .arc{ position:relative; width:100%; max-width:1160px; height:300px; margin:0 auto; }
+.masthead .arc{ position:relative; width:100%; max-width:1160px; height:360px; margin:0 auto; }
 .arc-line{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
 .arc-line path{ fill:none; stroke-width:3; stroke-linecap:round; }
 .masthead-brand{ position:absolute; top:4px; left:50%; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:.3rem; text-decoration:none; text-align:center; }
 .masthead-brand .wp-block-site-logo{ width:auto !important; }
 .masthead-brand .wp-block-site-logo img{ height:104px !important; width:auto !important; max-width:none; }
-.masthead-name{ font-family:var(--wp--preset--font-family--fraunces); font-weight:600; font-size:clamp(2.7rem,1.9rem+2.6vw,4rem); color:var(--c-ink); line-height:1.04; }
+.masthead-name{ font-family:var(--wp--preset--font-family--fraunces); font-weight:600; font-size:clamp(1.95rem,1.45rem+1.4vw,2.5rem); color:var(--c-ink); line-height:1.04; }
 .masthead-sub{ font-size:clamp(1.05rem,.9rem+.5vw,1.35rem); color:var(--c-muted); letter-spacing:.03em; }
 .arc-item{ position:absolute; transform:translate(-50%,-50%); text-decoration:none; opacity:0; }
 .arc-btn{ width:66px; height:66px; border-radius:50%; background:var(--c-surface); border:1px solid var(--c-line); box-shadow:var(--aws-shadow-sm); display:grid; place-items:center; color:var(--c-primary); transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s, border-color .25s, background .25s; }
@@ -315,7 +315,7 @@ a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:fo
 .masthead .masthead-name,
 .aws-header .wp-block-site-title,
 .aws-header .wp-block-site-title a{
-  font-size: clamp(2.7rem, 1.9rem + 2.6vw, 4rem) !important;
+  font-size: clamp(1.95rem, 1.45rem + 1.4vw, 2.5rem) !important;
   font-family: var(--wp--preset--font-family--fraunces) !important;
   font-weight: 600 !important;
   line-height: 1.04 !important;
