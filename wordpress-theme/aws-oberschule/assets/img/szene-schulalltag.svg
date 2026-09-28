@@ -1,0 +1,88 @@
+<svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration: Lernen im Schulalltag mit Tafel, Buechern und Ideen">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EAF5F8"/>
+      <stop offset="1" stop-color="#DCEAF1"/>
+    </linearGradient>
+    <linearGradient id="board" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12414C"/>
+      <stop offset="1" stop-color="#0C2E36"/>
+    </linearGradient>
+    <linearGradient id="bulb" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE6AE"/>
+      <stop offset="1" stop-color="#FFD37A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Wand + Boden -->
+  <rect width="800" height="600" fill="url(#wall)"/>
+  <rect y="452" width="800" height="148" fill="#CFE0E9"/>
+  <rect y="452" width="800" height="10" fill="#B9CEDA"/>
+
+  <!-- Tafel / Whiteboard -->
+  <rect x="120" y="96" width="470" height="250" rx="14" fill="url(#board)" stroke="#0A252C" stroke-width="4"/>
+  <rect x="120" y="330" width="470" height="14" rx="7" fill="#9CB3BE"/>
+  <!-- Kreide-Diagramme -->
+  <g stroke="#3FD0DE" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M168 300 L168 168"/>
+    <path d="M168 300 L300 300"/>
+    <polyline points="180,270 220,230 250,250 292,190"/>
+    <circle cx="292" cy="190" r="6" fill="#3FD0DE"/>
+  </g>
+  <g stroke="#FFFFFF" stroke-opacity=".9" stroke-width="4" fill="none" stroke-linecap="round">
+    <path d="M360 170 h150"/>
+    <path d="M360 200 h120"/>
+    <path d="M360 230 h150"/>
+  </g>
+  <!-- Glueckliche Formel -->
+  <circle cx="470" cy="288" r="26" fill="none" stroke="#10B3C2" stroke-width="4"/>
+  <path d="M470 262 l7 18 h-14 z" fill="#10B3C2"/>
+
+  <!-- Gluehbirne (Idee) -->
+  <g>
+    <circle cx="662" cy="150" r="44" fill="url(#bulb)"/>
+    <rect x="646" y="188" width="32" height="18" rx="5" fill="#B9CEDA"/>
+    <rect x="650" y="204" width="24" height="10" rx="4" fill="#9CB3BE"/>
+    <g stroke="#10B3C2" stroke-width="5" stroke-linecap="round">
+      <path d="M662 78 v-20"/>
+      <path d="M726 150 h20"/>
+      <path d="M598 150 h-20"/>
+      <path d="M709 103 l14 -14"/>
+      <path d="M615 103 l-14 -14"/>
+    </g>
+  </g>
+
+  <!-- Schreibtisch -->
+  <rect x="150" y="440" width="520" height="26" rx="8" fill="#0F5FA8"/>
+  <rect x="176" y="466" width="16" height="96" rx="5" fill="#0B4680"/>
+  <rect x="628" y="466" width="16" height="96" rx="5" fill="#0B4680"/>
+
+  <!-- Aufgeschlagenes Buch -->
+  <g>
+    <path d="M300 440 C 340 424, 384 424, 400 436 C 416 424, 460 424, 500 440 L 500 452 C 460 438, 416 438, 400 450 C 384 438, 340 438, 300 452 Z" fill="#FFFFFF" stroke="#CBDCE6" stroke-width="2"/>
+    <line x1="400" y1="436" x2="400" y2="450" stroke="#CBDCE6" stroke-width="2"/>
+  </g>
+
+  <!-- Buchstapel -->
+  <g>
+    <rect x="196" y="416" width="86" height="16" rx="4" fill="#10B3C2"/>
+    <rect x="204" y="400" width="78" height="16" rx="4" fill="#0F5FA8"/>
+    <rect x="200" y="384" width="70" height="16" rx="4" fill="#3FD0DE"/>
+  </g>
+
+  <!-- Stiftbecher -->
+  <g>
+    <rect x="556" y="398" width="46" height="42" rx="8" fill="#E4EEF3" stroke="#CBDCE6" stroke-width="2"/>
+    <rect x="566" y="366" width="7" height="34" rx="3" fill="#0B4680"/>
+    <rect x="576" y="358" width="7" height="42" rx="3" fill="#10B3C2"/>
+    <rect x="586" y="372" width="7" height="28" rx="3" fill="#FFD37A"/>
+  </g>
+
+  <!-- Pflanze -->
+  <g>
+    <rect x="690" y="410" width="46" height="40" rx="6" fill="#4EA98F"/>
+    <path d="M713 410 C 700 372, 686 366, 682 350 C 704 356, 712 380, 713 410" fill="#57B79F"/>
+    <path d="M713 410 C 726 372, 740 366, 744 350 C 722 356, 714 380, 713 410" fill="#68C6AC"/>
+    <path d="M713 410 C 712 380, 713 360, 713 344" stroke="#3C8C81" stroke-width="3" fill="none"/>
+  </g>
+</svg>
