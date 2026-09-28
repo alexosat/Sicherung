@@ -62,6 +62,14 @@ if ( ! function_exists( 'aws_enqueue' ) ) {
 			wp_get_theme()->get( 'Version' ),
 			true
 		);
+		// Karte (OpenStreetMap) mit Klick-zum-Laden (Datenschutz).
+		wp_enqueue_script(
+			'aws-map-consent',
+			get_theme_file_uri( 'assets/js/map-consent.js' ),
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			true
+		);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'aws_enqueue' );

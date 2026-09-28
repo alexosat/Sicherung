@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.9.0
+Version: 1.10.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -213,7 +213,17 @@ a{ color: var(--c-primary); }
 .aws-contact-list li{ padding-left:3.4rem; position:relative; min-height:42px; display:flex; flex-direction:column; justify-content:center; }
 .aws-contact-list .aws-ic{ position:absolute; left:0; top:0; margin:0; width:42px; height:42px; }
 .aws-contact-list small{ text-transform:uppercase; letter-spacing:.08em; color:var(--c-muted); font-weight:600; font-size:.72rem; }
-.aws-map{ border-radius:var(--aws-radius); border:1px solid var(--c-line); overflow:hidden; box-shadow:var(--aws-shadow); aspect-ratio:16/11; background:var(--c-surface-2); display:grid; place-items:center; color:var(--c-muted); text-align:center; }
+.aws-map{ position:relative; border-radius:var(--aws-radius); border:1px solid var(--c-line); overflow:hidden; box-shadow:var(--aws-shadow); aspect-ratio:16/11; background:var(--c-surface-2); display:grid; place-items:center; color:var(--c-muted); text-align:center; }
+.aws-map.is-loaded{ display:block; }
+.aws-map iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; display:block; }
+.aws-map-consent{ padding:1.5rem; max-width:36ch; }
+.aws-map-title{ font-weight:600; color:var(--c-ink); margin:0 0 .4rem; }
+.aws-map-text{ font-size:.86rem; color:var(--c-muted); margin:0 0 1rem; line-height:1.5; }
+.aws-map-load{ display:inline-flex; align-items:center; gap:.5rem; background:var(--c-primary); color:#fff; border:1px solid transparent; border-radius:100px; padding:.7rem 1.35rem; font-weight:600; font-size:1rem; cursor:pointer; box-shadow:var(--aws-shadow-sm); transition:background .18s ease, transform .18s ease; }
+.aws-map-load:hover{ background:var(--c-primary-deep); transform:translateY(-2px); }
+:root[data-theme="dark"] .aws-map-load{ color:#06171a; }
+.aws-map-links{ font-size:.82rem; color:var(--c-muted); margin:1rem 0 0; }
+.aws-map-links a{ color:var(--c-primary); }
 
 /* ---------- Footer ---------- */
 .aws-footer{ background:var(--c-surface-2); border-top:1px solid var(--c-line); padding-block:2.6rem 1.8rem; }
