@@ -149,7 +149,7 @@
   .hero-inner {
     position: relative; z-index: 1;
     display: grid; grid-template-columns: 1.15fr .85fr; gap: 3rem; align-items: center;
-    padding-block: clamp(3.5rem, 7vw, 6.5rem);
+    padding-block: clamp(.5rem, 1.5vw, 1.5rem) clamp(3.5rem, 7vw, 6.5rem);
   }
   .hero h1 { font-size: var(--step-4); font-weight: 600; }
   .hero h1 em { font-style: italic; color: var(--primary); font-weight: 500; }
@@ -211,8 +211,8 @@
   }
 
   /* ---------- Kopf (Masthead mit ∪-Bogen) ---------- */
-  .masthead { position: relative; padding: 1.25rem 0 .5rem; }
-  .masthead .arc { height: 430px; max-width: 900px; margin: 0 auto; }
+  .masthead { position: relative; padding: 1rem 0 0; }
+  .masthead .arc { height: 300px; max-width: 1160px; margin: 0 auto; }
   .masthead-brand { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .3rem; text-decoration: none; text-align: center; }
   .masthead-logo { height: 78px; width: auto; }
   .masthead-name { font-family: "Fraunces", serif; font-weight: 600; font-size: clamp(1.5rem, 1.1rem + 1.3vw, 2.2rem); color: var(--ink); line-height: 1.05; }
@@ -909,19 +909,21 @@
       svg.style.display = "";
       var W = arc.clientWidth, H = arc.clientHeight;
       svg.setAttribute("viewBox", "0 0 " + W + " " + H);
-      var cx = W / 2, top = 132, R = Math.min(W / 2 - 66, H - top - 88);
+      var cx = W / 2, top = 92;
+      var Rx = W / 2 - 96;                    // breit
+      var Ry = Math.min(120, H - top - 92);   // flach
       var n = items.length;
-      // Bogen nach unten (Wiege): Enden oben, Mitte unten
+      // Flacher, breiter Bogen nach unten (Ellipse): Enden oben, Mitte unten
       var d = "";
-      for (var sgm = 0; sgm <= 60; sgm++) {
-        var aa = Math.PI * (1 - sgm / 60);
-        d += (sgm ? " L " : "M ") + (cx + R * Math.cos(aa)).toFixed(1) + " " + (top + R * Math.sin(aa)).toFixed(1);
+      for (var sgm = 0; sgm <= 80; sgm++) {
+        var aa = Math.PI * (1 - sgm / 80);
+        d += (sgm ? " L " : "M ") + (cx + Rx * Math.cos(aa)).toFixed(1) + " " + (top + Ry * Math.sin(aa)).toFixed(1);
       }
       path.setAttribute("d", d);
       items.forEach(function (it, i) {
         var a = Math.PI * (1 - i / (n - 1)); // links (PI) -> rechts (0)
-        it.style.left = (cx + R * Math.cos(a)) + "px";
-        it.style.top = (top + R * Math.sin(a)) + "px";
+        it.style.left = (cx + Rx * Math.cos(a)) + "px";
+        it.style.top = (top + Ry * Math.sin(a)) + "px";
       });
     }
 
