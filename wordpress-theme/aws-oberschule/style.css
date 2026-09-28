@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.8.1
+Version: 1.9.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -319,6 +319,46 @@ a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:fo
   font-family: var(--wp--preset--font-family--fraunces) !important;
   font-weight: 600 !important;
   line-height: 1.04 !important;
+}
+
+/* ---------- Sprach-Hinweis (Browser-Uebersetzung, DSGVO-frei) ---------- */
+.aws-lang-toggle{
+  position:fixed; top:16px; left:16px; z-index:60;
+  width:44px; height:44px; border-radius:50%; display:grid; place-items:center; padding:0; cursor:pointer;
+  color:var(--c-ink);
+  background:var(--glass-sheen), var(--glass-bg-strong);
+  -webkit-backdrop-filter:blur(14px) saturate(var(--glass-sat)); backdrop-filter:blur(14px) saturate(var(--glass-sat));
+  border:1px solid var(--glass-hairline);
+  box-shadow:var(--glass-shadow), inset 0 1px 0 var(--glass-edge);
+  transition:transform .15s, border-color .15s;
+}
+.aws-lang-toggle:hover{ border-color:var(--c-primary); transform:translateY(-1px); }
+.aws-lang-toggle svg{ width:20px; height:20px; }
+.aws-lang-pop{
+  position:fixed; top:70px; left:16px; z-index:61; width:min(340px, 92vw);
+  background:var(--glass-sheen), var(--glass-bg-strong);
+  -webkit-backdrop-filter:blur(18px) saturate(var(--glass-sat)); backdrop-filter:blur(18px) saturate(var(--glass-sat));
+  border:1px solid var(--glass-hairline); border-radius:var(--aws-radius);
+  box-shadow:var(--glass-shadow-hi), inset 0 1px 0 var(--glass-edge);
+  padding:1.05rem 1.15rem; color:var(--c-ink);
+}
+.aws-lang-pop[hidden]{ display:none; }
+.aws-lang-pop h3{ font-family:var(--wp--preset--font-family--fraunces); font-weight:600; font-size:1.1rem; margin:0 0 .4rem; }
+.aws-lang-intro{ margin:.1rem 0 .6rem; font-size:.9rem; color:var(--c-ink); }
+.aws-lang-langs{ display:flex; flex-wrap:wrap; gap:.35rem .4rem; margin:0 0 .8rem; }
+.aws-lang-langs span{ font-size:.82rem; color:var(--c-primary-deep); background:var(--c-primary-soft); border-radius:100px; padding:.22rem .6rem; }
+:root[data-theme="dark"] .aws-lang-langs span{ color:var(--c-ink); }
+.aws-lang-steps{ list-style:none; margin:0; padding:0; display:grid; gap:.5rem; }
+.aws-lang-steps li{ font-size:.86rem; color:var(--c-muted); padding-left:1.15rem; position:relative; }
+.aws-lang-steps li strong{ color:var(--c-ink); font-weight:600; }
+.aws-lang-steps li::before{ content:""; position:absolute; left:0; top:.5em; width:6px; height:6px; border-radius:50%; background:var(--c-accent); }
+.aws-lang-note{ margin:.8rem 0 0; font-size:.78rem; color:var(--c-muted); }
+@media (max-width:700px){ .aws-lang-toggle{ top:12px; left:12px; } .aws-lang-pop{ top:62px; } }
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))){
+  .aws-lang-toggle, .aws-lang-pop{ background:var(--c-surface); }
+}
+@media (prefers-reduced-transparency: reduce){
+  .aws-lang-toggle, .aws-lang-pop{ background:var(--c-surface); -webkit-backdrop-filter:none; backdrop-filter:none; }
 }
 
 /* Bild-Platzhalter mit Illustration/Foto gefuellt (blendet Verlauf + Label aus) */

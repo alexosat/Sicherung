@@ -54,6 +54,14 @@ if ( ! function_exists( 'aws_enqueue' ) ) {
 			wp_get_theme()->get( 'Version' ),
 			true
 		);
+		// Sprach-Hinweis (Browser-Übersetzung): Popover öffnen/schließen.
+		wp_enqueue_script(
+			'aws-lang-hint',
+			get_theme_file_uri( 'assets/js/lang-hint.js' ),
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			true
+		);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'aws_enqueue' );
