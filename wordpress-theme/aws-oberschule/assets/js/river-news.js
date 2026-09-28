@@ -10,21 +10,19 @@
   function init() {
     var track = document.getElementById("newsTrack");
     if (!track) return;
-    // Skript ist aktiv: statische Fallback-Linie ausblenden.
-    track.classList.add("ready");
     var svg = document.getElementById("newsRiver");
     var base = document.getElementById("riverBase");
     var draw = document.getElementById("riverDraw");
     var head = document.getElementById("newsHead");
     var nodesLayer = document.getElementById("newsNodes");
-    // Beiträge aus dem Query-Loop (.wp-block-post) oder – als Fallback – feste .news-item
-    var items = Array.prototype.slice.call(track.querySelectorAll(".news-list .wp-block-post"));
-    if (!items.length) items = Array.prototype.slice.call(track.querySelectorAll(".news-item"));
-    // Noch keine Beiträge: sauberer Leer-Zustand (Fluss/Knoten aus, Hinweis-Kasten bleibt).
-    if (!items.length) { track.classList.add("is-empty"); return; }
     if (!svg || !base || !draw || !nodesLayer) return;
+    var items = Array.prototype.slice.call(track.querySelectorAll(".news-item"));
+    if (!items.length) return;
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     function mobile() { return window.matchMedia("(max-width: 760px)").matches; }
+
+    // Skript ist aktiv: Fallback-Linie ausblenden; bei Bewegung erlaubt zusätzlich animieren.
+    track.classList.add("ready");
     if (!reduce) track.classList.add("anim");
 
     var nodes = items.map(function () {
