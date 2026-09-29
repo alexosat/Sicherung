@@ -20,6 +20,11 @@ if ( ! defined( 'AWS_ANMELDUNG_TO' ) ) {
 	define( 'AWS_ANMELDUNG_TO', 'sekretariat@schulzentrum-doerverden.de' );
 }
 
+/** Absenderadresse (sollte zu Ihrem SMTP-Postfach passen). */
+if ( ! defined( 'AWS_ANMELDUNG_FROM' ) ) {
+	define( 'AWS_ANMELDUNG_FROM', 'anmeldung@obs-doerverden.de' );
+}
+
 /** Kleine Escape-Hilfe für Ausgaben. */
 function aws_e( $s ) {
 	return esc_attr( (string) $s );
@@ -61,7 +66,7 @@ function aws_anmeldung_form() {
 		<div class="aws-hp" aria-hidden="true"><label>Bitte dieses Feld leer lassen<input type="text" name="aws_hp" tabindex="-1" autocomplete="off"></label></div>
 
 		<div class="aws-note">
-			<strong>Anmeldeschluss:</strong> <span class="aws-todo">TT.MM.JJJJ</span>. Bitte je eine <strong>Kopie</strong> beifügen:
+			<strong>Aufnahme für das Schuljahr 2026/27.</strong> Anmeldeschluss: <span class="aws-todo">TT.MM.JJJJ</span>. Bitte je eine <strong>Kopie</strong> beifügen:
 			Versetzungszeugnis Klasse 3, Halbjahreszeugnis Klasse 4, Geburtsurkunde. Mit <span class="req">*</span> markierte Felder sind Pflichtfelder.
 		</div>
 
@@ -392,9 +397,7 @@ function aws_anmeldung_handle() {
 
 	$subject = sprintf( 'Online-Anmeldung: %s, %s (Klasse %s)', $v( 'familienname' ), $v( 'vorname' ), $v( 'klassenstufe' ) );
 
-	$host = wp_parse_url( home_url(), PHP_URL_HOST );
-	$host = preg_replace( '/^www\./', '', (string) $host );
-	$from = 'anmeldung@' . $host;
+	$from    = apply_filters( 'aws_anmeldung_from', AWS_ANMELDUNG_FROM );
 	$headers = array(
 		'From: Online-Anmeldung <' . $from . '>',
 		'Content-Type: text/plain; charset=UTF-8',
