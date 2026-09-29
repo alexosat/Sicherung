@@ -81,6 +81,7 @@
     { "name": "footer", "title": "Fußbereich", "area": "footer" }
   ],
   "customTemplates": [
-    { "name": "page-legal", "title": "Rechtliche Seite", "postTypes": ["page"] }
+    { "name": "page-legal", "title": "Rechtliche Seite", "postTypes": ["page"] },
+    { "name": "page-anmeldung", "title": "Anmeldung", "postTypes": ["page"] }
   ]
 }

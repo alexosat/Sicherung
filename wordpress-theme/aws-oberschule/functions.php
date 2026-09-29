@@ -9,6 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Online-Anmeldung (Aufnahmebogen): Shortcode [aws_anmeldung] + E-Mail-Versand.
+require_once get_theme_file_path( 'inc/anmeldung-form.php' );
+
 if ( ! function_exists( 'aws_setup' ) ) {
 	function aws_setup() {
 		add_theme_support( 'wp-block-styles' );

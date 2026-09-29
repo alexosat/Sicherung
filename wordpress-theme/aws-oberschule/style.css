@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.17.0
+Version: 1.18.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -498,3 +498,37 @@ body::before{
   }
   .aws-section::before, body::before{ display:none; }
 }
+
+/* ---------- Online-Anmeldung (Formular) ---------- */
+.aws-form-ok{ background:color-mix(in srgb, var(--c-accent) 12%, var(--c-surface)); border:1px solid color-mix(in srgb, var(--c-accent) 40%, var(--c-line)); border-radius:var(--aws-radius); padding:1.6rem 1.5rem; }
+.aws-form-ok h2{ margin:0 0 .4rem; font-size:1.5rem; }
+.aws-form-ok p{ margin:0; color:var(--c-muted); }
+.aws-form-err{ background:color-mix(in srgb,#c62828 10%, var(--c-surface)); border:1px solid color-mix(in srgb,#c62828 45%, var(--c-line)); border-radius:12px; padding:.9rem 1.1rem; margin-bottom:1.4rem; color:#8a1f1f; }
+.aws-anmeldung .aws-hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+.aws-anmeldung .aws-note{ display:block; background:var(--c-primary-soft); border:1px solid color-mix(in srgb, var(--c-primary) 25%, var(--c-line)); border-radius:12px; padding:.9rem 1.1rem; color:var(--c-primary-deep); font-size:.95rem; margin-bottom:1.6rem; }
+.aws-anmeldung .req{ color:var(--c-primary); }
+.aws-anmeldung .opt{ font-weight:400; color:var(--c-muted); font-size:.8rem; }
+.aws-anmeldung fieldset{ border:1px solid var(--c-line); border-radius:var(--aws-radius); background:var(--c-surface); padding:1.4rem 1.4rem 1.6rem; margin:0 0 1.3rem; box-shadow:var(--aws-shadow-sm); }
+.aws-anmeldung legend{ font-family:var(--wp--preset--font-family--fraunces); font-weight:600; color:var(--c-primary-deep); font-size:1.2rem; padding:0 .4rem; display:flex; align-items:center; gap:.6rem; }
+.aws-anmeldung legend .n{ width:28px; height:28px; border-radius:50%; background:var(--c-primary); color:#fff; font-family:var(--wp--preset--font-family--figtree); font-weight:600; font-size:.9rem; display:grid; place-items:center; flex:none; }
+.aws-anmeldung .hint{ color:var(--c-muted); font-size:.9rem; margin:.1rem 0 1rem; }
+.aws-anmeldung .grid{ display:grid; grid-template-columns:1fr 1fr; gap:.9rem 1.1rem; }
+.aws-anmeldung .grid .full{ grid-column:1/-1; }
+@media(max-width:620px){ .aws-anmeldung .grid{ grid-template-columns:1fr; } }
+.aws-anmeldung label{ display:block; font-size:.85rem; font-weight:600; color:var(--c-ink); margin:0 0 .3rem; }
+.aws-anmeldung input[type=text],.aws-anmeldung input[type=date],.aws-anmeldung input[type=tel],.aws-anmeldung input[type=email],.aws-anmeldung select,.aws-anmeldung textarea{ width:100%; font:inherit; color:var(--c-ink); background:var(--c-surface); border:1px solid var(--c-line); border-radius:10px; padding:.6rem .7rem; transition:border-color .15s, box-shadow .15s; }
+.aws-anmeldung input:focus,.aws-anmeldung select:focus,.aws-anmeldung textarea:focus{ outline:none; border-color:var(--c-primary); box-shadow:0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); }
+.aws-anmeldung textarea{ min-height:64px; resize:vertical; }
+.aws-anmeldung .radio,.aws-anmeldung .check{ display:flex; flex-wrap:wrap; gap:.5rem .8rem; margin-top:.2rem; }
+.aws-anmeldung .radio label,.aws-anmeldung .check label{ display:flex; align-items:center; gap:.45rem; font-weight:500; background:var(--c-surface); border:1px solid var(--c-line); border-radius:10px; padding:.5rem .8rem; cursor:pointer; margin:0; }
+.aws-anmeldung .check.stack{ flex-direction:column; align-items:stretch; }
+.aws-anmeldung .check.stack label{ align-items:flex-start; gap:.6rem; }
+.aws-anmeldung .check.stack input{ margin-top:.2rem; }
+.aws-anmeldung .subhead{ font-weight:600; color:var(--c-primary-deep); margin:1.1rem 0 .5rem; font-size:.95rem; }
+.aws-anmeldung .cond{ border-left:3px solid var(--c-primary-soft); padding-left:.9rem; margin:.3rem 0 .2rem; }
+.aws-anmeldung .file{ border:1px dashed color-mix(in srgb, var(--c-primary) 45%, var(--c-line)); border-radius:12px; padding:.8rem .9rem; background:color-mix(in srgb, var(--c-primary) 5%, var(--c-surface)); }
+.aws-anmeldung .actions{ display:flex; flex-wrap:wrap; gap:.8rem; align-items:center; margin-top:.4rem; }
+.aws-anmeldung .btn{ appearance:none; border:none; cursor:pointer; font:inherit; font-weight:600; border-radius:100px; padding:.85rem 1.7rem; background:var(--c-primary); color:#fff; box-shadow:var(--aws-shadow-sm); transition:background .18s, transform .18s; }
+.aws-anmeldung .btn:hover{ background:var(--c-primary-deep); transform:translateY(-2px); }
+:root[data-theme="dark"] .aws-anmeldung .btn{ color:#06171a; }
+.aws-anmeldung .aws-todo{ background:color-mix(in srgb,#E6A100 22%, var(--c-surface)); border:1px dashed color-mix(in srgb,#E6A100 60%, var(--c-line)); border-radius:6px; padding:.05rem .4rem; font-weight:600; }
