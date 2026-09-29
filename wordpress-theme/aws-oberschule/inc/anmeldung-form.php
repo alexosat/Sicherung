@@ -66,7 +66,7 @@ function aws_anmeldung_form() {
 		<div class="aws-hp" aria-hidden="true"><label>Bitte dieses Feld leer lassen<input type="text" name="aws_hp" tabindex="-1" autocomplete="off"></label></div>
 
 		<div class="aws-note">
-			<strong>Aufnahme für das Schuljahr 2026/27.</strong> Anmeldeschluss: <span class="aws-todo">TT.MM.JJJJ</span>. Bitte je eine <strong>Kopie</strong> beifügen:
+			<strong>Aufnahme für das Schuljahr 2026/27.</strong> Bitte je eine <strong>Kopie</strong> beifügen:
 			Versetzungszeugnis Klasse 3, Halbjahreszeugnis Klasse 4, Geburtsurkunde. Mit <span class="req">*</span> markierte Felder sind Pflichtfelder.
 		</div>
 
