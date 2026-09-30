@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.24.0
+Version: 1.25.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -211,6 +211,25 @@ a{ color: var(--c-primary); }
 .aws-post-single .wp-block-post-date{ color:var(--c-muted); font-size:.9rem; margin:0 0 1.4rem; }
 .aws-post-single .wp-block-post-content{ font-size:1.05rem; line-height:1.75; }
 .aws-post-single .wp-block-post-content img{ border-radius:var(--aws-radius); height:auto; }
+/* Kommunikation Schule–Eltern */
+.aws-komm-concept{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:1rem 1.4rem; margin:1.4rem 0 0; padding:1.4rem; background:var(--c-surface-2); border:1px solid var(--c-line); border-radius:var(--aws-radius); }
+.aws-komm-actor{ display:flex; flex-direction:column; gap:.2rem; text-align:center; min-width:140px; padding:1rem 1.2rem; background:var(--c-surface); border:1px solid var(--c-line); border-radius:var(--aws-radius); box-shadow:var(--aws-shadow-sm); }
+.aws-komm-actor-name{ font-family:var(--wp--preset--font-family--fraunces); font-weight:600; font-size:1.25rem; color:var(--c-ink); }
+.aws-komm-actor-role{ color:var(--c-muted); font-size:.9rem; }
+.aws-komm-core{ display:flex; flex-direction:column; align-items:center; gap:.55rem; flex:1 1 220px; max-width:320px; }
+.aws-komm-arrows{ display:flex; justify-content:space-between; width:100%; color:var(--c-muted); font-size:.82rem; font-weight:600; }
+.aws-komm-hub{ display:flex; flex-direction:column; align-items:center; gap:.15rem; padding:1rem 1.6rem; border-radius:100px; background:var(--c-primary); color:#fff; box-shadow:var(--aws-shadow); width:100%; }
+.aws-komm-hub-title{ font-family:var(--wp--preset--font-family--fraunces); font-weight:600; font-size:1.7rem; line-height:1; }
+.aws-komm-hub-sub{ font-size:.82rem; opacity:.9; }
+:root[data-theme="dark"] .aws-komm-hub{ color:#06171a; }
+.aws-komm-hub-tags{ display:flex; flex-wrap:wrap; justify-content:center; gap:.4rem; }
+.aws-komm-hub-tags span{ font-size:.8rem; font-weight:600; color:var(--c-primary); background:var(--c-primary-soft); border:1px solid color-mix(in srgb, var(--c-primary) 25%, transparent); padding:.25rem .6rem; border-radius:100px; }
+.aws-komm-firstcontact{ margin:1.1rem 0 0; padding:.9rem 1.1rem; border-left:4px solid var(--c-primary); background:var(--c-primary-soft); border-radius:0 var(--aws-radius) var(--aws-radius) 0; color:var(--c-ink); }
+.aws-komm-table table{ width:100%; border-collapse:collapse; }
+.aws-komm-table th, .aws-komm-table td{ text-align:left; padding:.7rem .9rem; border-bottom:1px solid var(--c-line); vertical-align:top; }
+.aws-komm-table thead th{ background:var(--c-surface-2); color:var(--c-ink); font-weight:600; }
+.aws-komm-table td:last-child{ color:var(--c-primary); font-weight:600; }
+.aws-komm-note{ margin-top:1.4rem; font-size:.9rem; color:var(--c-muted); border:1px dashed var(--c-line); border-radius:var(--aws-radius); padding:.9rem 1.1rem; }
 
 /* ---------- Profile split ---------- */
 .aws-split{ align-items:center; gap: clamp(2rem,5vw,4rem) !important; }
