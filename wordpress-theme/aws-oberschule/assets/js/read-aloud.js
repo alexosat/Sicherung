@@ -100,13 +100,24 @@
       }
     }
 
+    function findStartIndex() {
+      // Beim ersten Satz beginnen, der von der aktuellen Scroll-Position aus sichtbar ist.
+      var top = 90; // Platz für die schwebenden Bedien-Elemente
+      for (var i = 0; i < units.length; i++) {
+        var el = units[i].el;
+        if (!el) continue;
+        if (el.getBoundingClientRect().bottom > top) return i;
+      }
+      return 0;
+    }
+
     function start() {
       if (units === null) build();
       if (!units.length) return;
       window.speechSynthesis.cancel();
       speaking = true; paused = false;
       setState("playing");
-      speakFrom(0);
+      speakFrom(findStartIndex());
     }
     function togglePause() {
       if (!speaking) return;
