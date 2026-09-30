@@ -201,8 +201,21 @@ function aws_anmeldung_form() {
 			</div>
 		</fieldset>
 
-		<!-- 9 Nachweise -->
-		<fieldset><legend><span class="n">9</span> Nachweise (Upload)</legend>
+		<!-- 9 Schulbuchausleihe -->
+		<fieldset><legend><span class="n">9</span> Schulbuchausleihe</legend>
+			<p class="hint">Die Schule bietet die entgeltliche Ausleihe der Schulbücher an. Für neue Schülerinnen und Schüler können Sie die Teilnahme gleich hier mit anmelden – die genauen Unterlagen (Bücherliste, Beträge, Bankverbindung/SEPA) sendet Ihnen das Sekretariat anschließend zu.</p>
+			<div class="subhead">Möchten Sie am Schulbuchausleih-Verfahren teilnehmen?</div>
+			<div class="radio"><label><input type="radio" name="buch_teilnahme" value="ja"> ja, wir möchten teilnehmen</label><label><input type="radio" name="buch_teilnahme" value="nein"> nein, wir kaufen die Bücher selbst</label></div>
+			<div class="subhead">Ermäßigung / Befreiung <span class="opt">(falls zutreffend)</span></div>
+			<div class="check stack">
+				<label><input type="checkbox" name="buch_ermaessigung" value="ja"> Anspruch auf <strong>Ermäßigung</strong> (mehrere schulpflichtige Kinder im Ausleihverfahren).</label>
+				<label><input type="checkbox" name="buch_befreiung" value="ja"> Anspruch auf <strong>Befreiung</strong> (z.&nbsp;B. Bezug von Sozialleistungen) – Nachweis füge ich bei / reiche ich nach.</label>
+			</div>
+			<p class="hint">Einen Nachweis für Ermäßigung/Befreiung können Sie unten im Abschnitt „Nachweise" hochladen.</p>
+		</fieldset>
+
+		<!-- 10 Nachweise -->
+		<fieldset><legend><span class="n">10</span> Nachweise (Upload)</legend>
 			<p class="hint">Erlaubte Formate: PDF, JPG, PNG (max. 8&nbsp;MB je Datei). Unterlagen können auch später im Sekretariat nachgereicht werden.</p>
 			<div class="grid">
 				<div class="full file"><label>Kopie Versetzungszeugnis Klasse 3</label><input type="file" name="datei_zeugnis3" accept=".pdf,.jpg,.jpeg,.png"></div>
@@ -213,8 +226,8 @@ function aws_anmeldung_form() {
 			</div>
 		</fieldset>
 
-		<!-- 10 Einwilligungen -->
-		<fieldset><legend><span class="n">10</span> Einwilligungen &amp; Kenntnisnahmen</legend>
+		<!-- 11 Einwilligungen -->
+		<fieldset><legend><span class="n">11</span> Einwilligungen &amp; Kenntnisnahmen</legend>
 			<div class="subhead">Fotos auf der Homepage der Schule <span class="opt">(freiwillig, jederzeit widerrufbar)</span></div>
 			<div class="check stack">
 				<label><input type="checkbox" name="ew_homepage_fotos" value="ja"> Veröffentlichung von <strong>Fotos</strong> meines Kindes</label>
@@ -325,6 +338,10 @@ function aws_anmeldung_handle() {
 			'krank_behandlung' => 'In Behandlung wegen', 'krank_arzt' => 'Arzt/Ärztin', 'krank_adresse' => 'Praxis Adresse/Tel.',
 			'krank_erkrankungen' => 'Erkrankungen/Allergien', 'krank_notfallmassnahme' => 'Notfallmaßnahme',
 			'krank_notfallmedikament' => 'Notfallmedikament', 'krank_handhabung' => 'Handhabung im Notfall',
+		),
+		'Schulbuchausleihe' => array(
+			'buch_teilnahme' => 'Teilnahme am Ausleihverfahren',
+			'_cb_buch_ermaessigung' => 'Anspruch auf Ermäßigung', '_cb_buch_befreiung' => 'Anspruch auf Befreiung',
 		),
 		'Einwilligungen & Kenntnisnahmen' => array(
 			'_cb_ew_homepage_fotos' => 'Homepage: Fotos', '_cb_ew_homepage_name' => 'Homepage: Vor- und Zuname',

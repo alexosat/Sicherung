@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.19.0
+Version: 1.19.1
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -172,6 +172,7 @@ a{ color: var(--c-primary); }
 .aws-card .wp-block-list li{ color:var(--c-muted); font-size:.93rem; padding-left:1.05rem; position:relative; }
 .aws-card .wp-block-list li::before{ content:""; position:absolute; left:0; top:.62em; width:5px; height:5px; border-radius:50%; background:var(--c-accent); }
 .aws-card .wp-block-buttons{ margin-top:1.1rem; }
+.aws-buch-cta{ margin-top:1.4rem; }
 
 /* ---------- Profile split ---------- */
 .aws-split{ align-items:center; gap: clamp(2rem,5vw,4rem) !important; }
