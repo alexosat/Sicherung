@@ -204,9 +204,9 @@ function aws_anmeldung_form() {
 		<!-- 9 Impfstatus / Masernschutz -->
 		<fieldset><legend><span class="n">9</span> Impfstatus – Masernschutz</legend>
 			<p class="hint">Für die Aufnahme ist nach dem Masernschutzgesetz (§&nbsp;20 IfSG) ein Nachweis über den Masernschutz erforderlich. Bitte machen Sie eine Angabe und laden Sie den entsprechenden Nachweis (Impfpass o.&nbsp;Ä.) hoch – die Vorlage ist auch später im Sekretariat möglich.</p>
-			<div class="subhead">Masernschutz meines Kindes</div>
+			<div class="subhead">Masernschutz meines Kindes <span class="req">*</span></div>
 			<div class="check stack">
-				<label><input type="radio" name="masern_status" value="Zwei Masernimpfungen"> Zwei Masernimpfungen erfolgt</label>
+				<label><input type="radio" name="masern_status" value="Zwei Masernimpfungen" required> Zwei Masernimpfungen erfolgt</label>
 				<label><input type="radio" name="masern_status" value="Immunität ärztlich bestätigt"> Immunität ärztlich bestätigt</label>
 				<label><input type="radio" name="masern_status" value="Ärztliche Kontraindikation"> Ärztlich bescheinigte Kontraindikation (Impfung nicht möglich)</label>
 				<label><input type="radio" name="masern_status" value="Nachweis wird nachgereicht"> Nachweis wird nachgereicht</label>
@@ -310,7 +310,7 @@ function aws_anmeldung_handle() {
 	};
 
 	// Minimale Pflichtprüfung.
-	if ( '' === $v( 'familienname' ) || '' === $v( 'vorname' ) || empty( $_POST['datenschutz'] ) ) {
+	if ( '' === $v( 'familienname' ) || '' === $v( 'vorname' ) || '' === $v( 'masern_status' ) || empty( $_POST['datenschutz'] ) ) {
 		wp_safe_redirect( add_query_arg( 'aws_anmeldung', 'error', $back ) );
 		exit;
 	}
