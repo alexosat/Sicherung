@@ -201,8 +201,23 @@ function aws_anmeldung_form() {
 			</div>
 		</fieldset>
 
-		<!-- 9 Schulbuchausleihe -->
-		<fieldset><legend><span class="n">9</span> Schulbuchausleihe</legend>
+		<!-- 9 Impfstatus / Masernschutz -->
+		<fieldset><legend><span class="n">9</span> Impfstatus – Masernschutz</legend>
+			<p class="hint">Für die Aufnahme ist nach dem Masernschutzgesetz (§&nbsp;20 IfSG) ein Nachweis über den Masernschutz erforderlich. Bitte machen Sie eine Angabe und laden Sie den entsprechenden Nachweis (Impfpass o.&nbsp;Ä.) hoch – die Vorlage ist auch später im Sekretariat möglich.</p>
+			<div class="subhead">Masernschutz meines Kindes</div>
+			<div class="check stack">
+				<label><input type="radio" name="masern_status" value="Zwei Masernimpfungen"> Zwei Masernimpfungen erfolgt</label>
+				<label><input type="radio" name="masern_status" value="Immunität ärztlich bestätigt"> Immunität ärztlich bestätigt</label>
+				<label><input type="radio" name="masern_status" value="Ärztliche Kontraindikation"> Ärztlich bescheinigte Kontraindikation (Impfung nicht möglich)</label>
+				<label><input type="radio" name="masern_status" value="Nachweis wird nachgereicht"> Nachweis wird nachgereicht</label>
+			</div>
+			<div class="grid" style="margin-top:.8rem">
+				<div class="full file"><label>Nachweis Masernschutz / Impfpass hochladen <span class="opt">(PDF, JPG, PNG)</span></label><input type="file" name="datei_impfnachweis" accept=".pdf,.jpg,.jpeg,.png"></div>
+			</div>
+		</fieldset>
+
+		<!-- 10 Schulbuchausleihe -->
+		<fieldset><legend><span class="n">10</span> Schulbuchausleihe</legend>
 			<p class="hint">Die Schule bietet die entgeltliche Ausleihe der Schulbücher an. Für neue Schülerinnen und Schüler können Sie die Teilnahme gleich hier mit anmelden – die genauen Unterlagen (Bücherliste, Beträge, Bankverbindung/SEPA) sendet Ihnen das Sekretariat anschließend zu.</p>
 			<div class="subhead">Möchten Sie am Schulbuchausleih-Verfahren teilnehmen?</div>
 			<div class="radio"><label><input type="radio" name="buch_teilnahme" value="ja"> ja, wir möchten teilnehmen</label><label><input type="radio" name="buch_teilnahme" value="nein"> nein, wir kaufen die Bücher selbst</label></div>
@@ -214,8 +229,8 @@ function aws_anmeldung_form() {
 			<p class="hint">Einen Nachweis für Ermäßigung/Befreiung können Sie unten im Abschnitt „Nachweise" hochladen.</p>
 		</fieldset>
 
-		<!-- 10 Nachweise -->
-		<fieldset><legend><span class="n">10</span> Nachweise (Upload)</legend>
+		<!-- 11 Nachweise -->
+		<fieldset><legend><span class="n">11</span> Nachweise (Upload)</legend>
 			<p class="hint">Erlaubte Formate: PDF, JPG, PNG (max. 8&nbsp;MB je Datei). Unterlagen können auch später im Sekretariat nachgereicht werden.</p>
 			<div class="grid">
 				<div class="full file"><label>Kopie Versetzungszeugnis Klasse 3</label><input type="file" name="datei_zeugnis3" accept=".pdf,.jpg,.jpeg,.png"></div>
@@ -226,8 +241,8 @@ function aws_anmeldung_form() {
 			</div>
 		</fieldset>
 
-		<!-- 11 Einwilligungen -->
-		<fieldset><legend><span class="n">11</span> Einwilligungen &amp; Kenntnisnahmen</legend>
+		<!-- 12 Einwilligungen -->
+		<fieldset><legend><span class="n">12</span> Einwilligungen &amp; Kenntnisnahmen</legend>
 			<div class="subhead">Fotos auf der Homepage der Schule <span class="opt">(freiwillig, jederzeit widerrufbar)</span></div>
 			<div class="check stack">
 				<label><input type="checkbox" name="ew_homepage_fotos" value="ja"> Veröffentlichung von <strong>Fotos</strong> meines Kindes</label>
@@ -339,6 +354,9 @@ function aws_anmeldung_handle() {
 			'krank_erkrankungen' => 'Erkrankungen/Allergien', 'krank_notfallmassnahme' => 'Notfallmaßnahme',
 			'krank_notfallmedikament' => 'Notfallmedikament', 'krank_handhabung' => 'Handhabung im Notfall',
 		),
+		'Impfstatus (Masernschutz)' => array(
+			'masern_status' => 'Masernschutz',
+		),
 		'Schulbuchausleihe' => array(
 			'buch_teilnahme' => 'Teilnahme am Ausleihverfahren',
 			'_cb_buch_ermaessigung' => 'Anspruch auf Ermäßigung', '_cb_buch_befreiung' => 'Anspruch auf Befreiung',
@@ -375,6 +393,7 @@ function aws_anmeldung_handle() {
 		'datei_zeugnis3'      => 'Versetzungszeugnis Kl. 3',
 		'datei_zeugnis4'      => 'Halbjahreszeugnis Kl. 4',
 		'datei_geburtsurkunde' => 'Geburtsurkunde',
+		'datei_impfnachweis'  => 'Masernschutz/Impfpass',
 		'datei_ermaessigung'  => 'Ermäßigung/Befreiung',
 		'datei_sorgerecht'    => 'Sorgerecht',
 	);
