@@ -99,7 +99,7 @@ function aws_anmeldung_form() {
 		<fieldset><legend><span class="n">2</span> Teilnahme am Religionsunterricht</legend>
 			<?php echo aws_yesno( 'rel_teilnahme' ); ?>
 			<div class="subhead">Mein Kind nimmt teil an:</div>
-			<div class="radio"><label><input type="radio" name="rel_art" value="Religionsunterricht"> Religionsunterricht (konfessionell/kooperativ)</label><label><input type="radio" name="rel_art" value="Werte und Normen"> Werte und Normen</label></div>
+			<div class="radio"><label><input type="radio" name="rel_art" value="Christliche Religion"> Christliche Religion</label><label><input type="radio" name="rel_art" value="Werte und Normen"> Werte und Normen</label></div>
 		</fieldset>
 
 		<!-- 3 Schullaufbahn -->
