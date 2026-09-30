@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.25.2
+Version: 1.26.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -400,6 +400,22 @@ a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:fo
 @media (prefers-reduced-motion: no-preference){ .arc.in .arc-btn svg{ animation:arc-float 5s ease-in-out infinite; } }
 @keyframes arc-float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
 .aws-float-toggle{ position:fixed; top:16px; right:16px; z-index:60; box-shadow:var(--aws-shadow-sm); }
+/* Vorlesefunktion */
+.aws-tts{ position:fixed; top:68px; left:16px; z-index:60; display:flex; gap:.4rem; align-items:center; }
+.aws-tts[hidden]{ display:none; }
+.aws-tts-btn{ width:44px; height:44px; border-radius:50%; display:grid; place-items:center; padding:0; cursor:pointer; color:var(--c-ink);
+  background:var(--glass-sheen), var(--glass-bg-strong);
+  -webkit-backdrop-filter:blur(14px) saturate(var(--glass-sat)); backdrop-filter:blur(14px) saturate(var(--glass-sat));
+  border:1px solid var(--glass-hairline); box-shadow:var(--glass-shadow), inset 0 1px 0 var(--glass-edge);
+  transition:transform .15s, border-color .15s; }
+.aws-tts-btn:hover{ border-color:var(--c-primary); transform:translateY(-1px); }
+.aws-tts-btn[hidden]{ display:none; }
+.aws-tts-btn svg{ width:20px; height:20px; }
+.aws-tts-btn .ic-play{ display:none; }
+.aws-tts-btn.is-paused .ic-pause{ display:none; }
+.aws-tts-btn.is-paused .ic-play{ display:block; }
+.aws-reading{ background:var(--c-primary-soft); box-shadow:0 0 0 3px var(--c-primary-soft); border-radius:5px; }
+@media (max-width:700px){ .aws-tts{ top:60px; left:12px; } }
 @media (max-width:700px){
   .masthead .arc{ height:auto; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:1.3rem 1.5rem; padding:1rem 0; }
   .masthead-brand{ position:static; transform:none; flex-basis:100%; margin-bottom:.4rem; }

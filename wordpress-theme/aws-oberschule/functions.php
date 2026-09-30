@@ -73,6 +73,14 @@ if ( ! function_exists( 'aws_enqueue' ) ) {
 			wp_get_theme()->get( 'Version' ),
 			true
 		);
+		// Vorlesefunktion (Web Speech API, ohne externe Dienste).
+		wp_enqueue_script(
+			'aws-read-aloud',
+			get_theme_file_uri( 'assets/js/read-aloud.js' ),
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			true
+		);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'aws_enqueue' );
