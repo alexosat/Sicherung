@@ -12,6 +12,15 @@
     var arc = document.getElementById("arc");
     var shown = false;
 
+    // Logo = „nach ganz oben“ (zuverlässig auf jeder Seite, statt Anker-Sprung).
+    var brand = bar.querySelector(".aws-mininav-brand");
+    if (brand) {
+      brand.addEventListener("click", function (e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
     function shouldShow() {
       if (arc) return arc.getBoundingClientRect().bottom <= 8;
       return (window.pageYOffset || document.documentElement.scrollTop || 0) > 400;
