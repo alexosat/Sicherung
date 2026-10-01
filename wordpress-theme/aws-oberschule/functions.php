@@ -150,6 +150,45 @@ add_action( 'wp_head', 'aws_head_meta', 5 );
 /**
  * Eigene Kategorie für die Block-Muster (Patterns) dieser Schule.
  */
+if ( ! function_exists( 'aws_mininav' ) ) {
+	/**
+	 * Kompakte Mini-Navigation (erscheint beim Scrollen). Wird früh im <body>
+	 * ausgegeben; das Logo dient als „Nach oben“-Button.
+	 */
+	function aws_mininav() {
+		$links = array(
+			'/#profil'        => 'Schulprofil',
+			'/#ags'           => 'AGs',
+			'/#berichte'      => 'Aus dem Schulalltag',
+			'/#foerderverein' => 'Förderverein',
+			'/#team'          => 'Für Sie da',
+			'/#buecher'       => 'Schulstart',
+			'/kommunikation/' => 'Kommunikation',
+			'/#kontakt'       => 'Kontakt',
+		);
+
+		$logo_id  = get_theme_mod( 'custom_logo' );
+		$logo_url = $logo_id ? wp_get_attachment_image_url( $logo_id, 'medium' ) : '';
+		$name     = get_bloginfo( 'name' );
+
+		echo '<nav class="aws-mininav" id="awsMiniNav" aria-label="Kompaktnavigation">';
+		echo '<a class="aws-mininav-brand" href="/#top" aria-label="Nach ganz oben">';
+		if ( $logo_url ) {
+			echo '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( $name ) . ' – nach oben">';
+		} else {
+			echo esc_html( $name );
+		}
+		echo '</a>';
+		echo '<div class="aws-mininav-links">';
+		foreach ( $links as $href => $label ) {
+			echo '<a href="' . esc_url( $href ) . '">' . esc_html( $label ) . '</a>';
+		}
+		echo '</div>';
+		echo '</nav>';
+	}
+}
+add_action( 'wp_body_open', 'aws_mininav' );
+
 if ( ! function_exists( 'aws_register_pattern_category' ) ) {
 	function aws_register_pattern_category() {
 		if ( function_exists( 'register_block_pattern_category' ) ) {
