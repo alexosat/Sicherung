@@ -164,6 +164,7 @@ if ( ! function_exists( 'aws_mininav' ) ) {
 			'/#team'          => 'Für Sie da',
 			'/#buecher'       => 'Schulstart',
 			'/kommunikation/' => 'Kommunikation',
+			'/service/'       => 'Service & Infos',
 			'/#kontakt'       => 'Kontakt',
 		);
 
