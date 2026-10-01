@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.26.3
+Version: 1.27.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -399,9 +399,22 @@ a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:fo
 @keyframes arc-pop{ from{ opacity:0; transform:translate(-50%,-50%) scale(.3); } to{ opacity:1; transform:translate(-50%,-50%) scale(1); } }
 @media (prefers-reduced-motion: no-preference){ .arc.in .arc-btn svg{ animation:arc-float 5s ease-in-out infinite; } }
 @keyframes arc-float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
-.aws-float-toggle{ position:fixed; top:16px; right:16px; z-index:60; box-shadow:var(--aws-shadow-sm); }
+.aws-float-toggle{ position:fixed; top:16px; right:16px; z-index:72; box-shadow:var(--aws-shadow-sm); }
+/* Kompakte Mini-Navigation (erscheint beim Scrollen) */
+.aws-mininav{ position:fixed; top:0; left:0; right:0; z-index:65; display:flex; align-items:center; gap:1rem;
+  padding:.5rem 72px; transform:translateY(-100%); transition:transform .25s ease; visibility:hidden;
+  background:var(--glass-sheen), var(--glass-bg-strong);
+  -webkit-backdrop-filter:blur(14px) saturate(var(--glass-sat)); backdrop-filter:blur(14px) saturate(var(--glass-sat));
+  border-bottom:1px solid var(--glass-hairline); box-shadow:var(--glass-shadow); }
+.aws-mininav.show{ transform:translateY(0); visibility:visible; }
+.aws-mininav-brand{ font-family:var(--wp--preset--font-family--fraunces); font-weight:600; color:var(--c-ink); text-decoration:none; white-space:nowrap; font-size:1rem; flex:none; }
+.aws-mininav-links{ display:flex; gap:.15rem .3rem; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.aws-mininav-links::-webkit-scrollbar{ display:none; }
+.aws-mininav-links a{ color:var(--c-ink); text-decoration:none; font-weight:600; font-size:.9rem; padding:.35rem .6rem; border-radius:100px; white-space:nowrap; transition:background .15s, color .15s; }
+.aws-mininav-links a:hover{ color:var(--c-primary); background:var(--c-primary-soft); }
+@media (max-width:700px){ .aws-mininav{ padding:.45rem 60px; } .aws-mininav-brand{ display:none; } }
 /* Vorlesefunktion */
-.aws-tts{ position:fixed; top:68px; left:16px; z-index:60; display:flex; gap:.4rem; align-items:center; }
+.aws-tts{ position:fixed; top:68px; left:16px; z-index:72; display:flex; gap:.4rem; align-items:center; }
 .aws-tts[hidden]{ display:none; }
 .aws-tts-btn{ width:44px; height:44px; border-radius:50%; display:grid; place-items:center; padding:0; cursor:pointer; color:var(--c-ink);
   background:var(--glass-sheen), var(--glass-bg-strong);
@@ -439,7 +452,7 @@ a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:fo
 
 /* ---------- Sprach-Hinweis (Browser-Uebersetzung, DSGVO-frei) ---------- */
 .aws-lang-toggle{
-  position:fixed; top:16px; left:16px; z-index:60;
+  position:fixed; top:16px; left:16px; z-index:72;
   width:44px; height:44px; border-radius:50%; display:grid; place-items:center; padding:0; cursor:pointer;
   color:var(--c-ink);
   background:var(--glass-sheen), var(--glass-bg-strong);
