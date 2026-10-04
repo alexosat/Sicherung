@@ -89,6 +89,14 @@ if ( ! function_exists( 'aws_enqueue' ) ) {
 			wp_get_theme()->get( 'Version' ),
 			true
 		);
+		// Lageplan / Campus-Karte (anklickbare Orte).
+		wp_enqueue_script(
+			'aws-campus-map',
+			get_theme_file_uri( 'assets/js/campus-map.js' ),
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			true
+		);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'aws_enqueue' );

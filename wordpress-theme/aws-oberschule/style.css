@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.28.1
+Version: 1.29.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -230,6 +230,27 @@ a{ color: var(--c-primary); }
 .aws-komm-table thead th{ background:var(--c-surface-2); color:var(--c-ink); font-weight:600; }
 .aws-komm-table td:last-child{ color:var(--c-primary); font-weight:600; }
 .aws-komm-note{ margin-top:1.4rem; font-size:.9rem; color:var(--c-muted); border:1px dashed var(--c-line); border-radius:var(--aws-radius); padding:.9rem 1.1rem; }
+/* Lageplan / Campus-Karte */
+.aws-campus-layout{ display:grid; grid-template-columns:1.6fr 1fr; gap:1.4rem; align-items:start; }
+@media(max-width:760px){ .aws-campus-layout{ grid-template-columns:1fr; } }
+.aws-campus-map{ position:relative; aspect-ratio:16/10; border:1px solid var(--c-line); border-radius:var(--aws-radius); overflow:hidden; box-shadow:var(--aws-shadow); }
+.aws-campus-scene{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.aws-campus-pin{ position:absolute; transform:translate(-50%,-50%); min-width:32px; height:32px; padding:0 6px; border-radius:16px; border:0; cursor:pointer; background:var(--c-surface); color:var(--c-primary); font-family:inherit; font-weight:700; font-size:.92rem; box-shadow:var(--aws-shadow-sm); display:grid; place-items:center; transition:transform .18s, background .18s, color .18s, box-shadow .18s; }
+.aws-campus-pin:hover{ transform:translate(-50%,-50%) scale(1.12); }
+.aws-campus-pin:focus-visible{ outline:3px solid var(--c-primary); outline-offset:3px; }
+.aws-campus-pin.active{ background:var(--c-primary); color:#fff; transform:translate(-50%,-50%) scale(1.15); box-shadow:0 0 0 6px var(--c-primary-soft), var(--aws-shadow); }
+:root[data-theme="dark"] .aws-campus-pin.active{ color:#06171a; }
+.aws-campus-panel{ background:var(--c-surface); border:1px solid var(--c-line); border-radius:var(--aws-radius); padding:1.4rem; position:sticky; top:16px; }
+.aws-campus-cat{ display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--c-accent); background:var(--c-primary-soft); padding:.25rem .6rem; border-radius:100px; }
+.aws-campus-panel h3{ font-size:1.4rem; margin:.7rem 0 .5rem; }
+.aws-campus-panel p{ color:var(--c-muted); margin:0; }
+.aws-campus-tip{ margin-top:.9rem !important; padding:.6rem .9rem; border-left:3px solid var(--c-primary); background:var(--c-primary-soft); border-radius:0 12px 12px 0; color:var(--c-ink) !important; font-size:.92rem; }
+.aws-campus-list{ list-style:none; margin:1.2rem 0 0; padding:0; display:flex; flex-wrap:wrap; gap:.45rem; }
+.aws-campus-list button{ cursor:pointer; font:inherit; font-size:.85rem; font-weight:600; color:var(--c-ink); background:transparent; border:1px solid var(--c-line); border-radius:100px; padding:.35rem .7rem; transition:border-color .15s, color .15s, background .15s; }
+.aws-campus-list button:hover{ border-color:var(--c-primary); color:var(--c-primary); }
+.aws-campus-list button.active{ background:var(--c-primary); border-color:var(--c-primary); color:#fff; }
+:root[data-theme="dark"] .aws-campus-list button.active{ color:#06171a; }
+.aws-campus-note{ margin-top:1.2rem; color:var(--c-muted); font-size:.82rem; }
 
 /* ---------- Profile split ---------- */
 .aws-split{ align-items:center; gap: clamp(2rem,5vw,4rem) !important; }
