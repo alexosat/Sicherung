@@ -1,0 +1,26 @@
+<?php
+/**
+ * Title: Seite: Schulsozialarbeit
+ * Slug: aws/schulsozialarbeit
+ * Categories: aws
+ * Inserter: true
+ * Description: Vorstellung der Schulsozialarbeit mit Angeboten für Schüler:innen, Eltern und Kollegium sowie Kontakt. In eine neue Seite „Schulsozialarbeit“ einfügen.
+ */
+?>
+<!-- wp:group {"className":"aws-inner"} --><div class="wp-block-group aws-inner">
+<!-- wp:group {"className":"aws-sec-head"} --><div class="wp-block-group aws-sec-head"><!-- wp:paragraph {"className":"aws-eyebrow"} --><p class="aws-eyebrow">Beratung &amp; Unterstützung</p><!-- /wp:paragraph --><!-- wp:heading {"level":1} --><h1 class="wp-block-heading">Schulsozialarbeit</h1><!-- /wp:heading --><!-- wp:paragraph --><p>Mein Name ist <strong>Markus Gohde</strong>, ich bin Schulsozialarbeiter an der Aller-Weser-Oberschule. Schulsozialarbeit ist ein sozialpädagogisches Unterstützungsangebot in der Schule – für alle Kinder, Jugendlichen und Erwachsenen.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
+
+<!-- wp:heading {"level":2} --><h2 class="wp-block-heading">Womit ich unterstütze</h2><!-- /wp:heading -->
+<!-- wp:list {"className":"aws-profile-list"} --><ul class="wp-block-list aws-profile-list"><!-- wp:list-item --><li>Beratung und Begleitung von Schülerinnen und Schülern</li><!-- /wp:list-item --><!-- wp:list-item --><li>Unterstützung in Einzelfällen und sozialpädagogische Gruppenarbeit</li><!-- /wp:list-item --><!-- wp:list-item --><li>Offene Gesprächs-, Kontakt- und Freizeitangebote im Ganztag</li><!-- /wp:list-item --><!-- wp:list-item --><li>Mitwirkung bei Unterrichtsprojekten und Veranstaltungen</li><!-- /wp:list-item --><!-- wp:list-item --><li>Zusammenarbeit mit Lehrkräften und Netzwerkarbeit</li><!-- /wp:list-item --></ul><!-- /wp:list -->
+
+<!-- wp:group {"className":"aws-grid aws-grid-3"} --><div class="wp-block-group aws-grid aws-grid-3">
+<!-- wp:group {"className":"aws-card"} --><div class="wp-block-group aws-card"><!-- wp:group {"className":"aws-ic aws-ic-star"} --><div class="wp-block-group aws-ic aws-ic-star"></div><!-- /wp:group --><!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Für Schülerinnen &amp; Schüler</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list"><!-- wp:list-item --><li>Ärger mit Eltern, Betreuern oder Freunden</li><!-- /wp:list-item --><!-- wp:list-item --><li>Fragen zu Praktikum oder Ausbildung</li><!-- /wp:list-item --><!-- wp:list-item --><li>Beziehungsstress</li><!-- /wp:list-item --><!-- wp:list-item --><li>Schwierigkeiten in der Schule</li><!-- /wp:list-item --><!-- wp:list-item --><li>Mobbing und Ängste</li><!-- /wp:list-item --></ul><!-- /wp:list --></div><!-- /wp:group -->
+<!-- wp:group {"className":"aws-card"} --><div class="wp-block-group aws-card"><!-- wp:group {"className":"aws-ic aws-ic-learn"} --><div class="wp-block-group aws-ic aws-ic-learn"></div><!-- /wp:group --><!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Für Eltern</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list"><!-- wp:list-item --><li>Erziehungsthemen</li><!-- /wp:list-item --><!-- wp:list-item --><li>Unterstützungsleistungen außerhalb der Schule</li><!-- /wp:list-item --><!-- wp:list-item --><li>Themen in der Familie (z.&nbsp;B. Trennung, Patchwork)</li><!-- /wp:list-item --></ul><!-- /wp:list --><!-- wp:paragraph --><p>Austausch in Einzelgesprächen, im Elterncafé oder gemeinsam mit weiteren Beteiligten.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
+<!-- wp:group {"className":"aws-card"} --><div class="wp-block-group aws-card"><!-- wp:group {"className":"aws-ic aws-ic-briefcase"} --><div class="wp-block-group aws-ic aws-ic-briefcase"></div><!-- /wp:group --><!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Für Lehrkräfte &amp; Team</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list"><!-- wp:list-item --><li>Projektarbeit und Klassenkonferenzen</li><!-- /wp:list-item --><!-- wp:list-item --><li>Gemeinschaftsveranstaltungen</li><!-- /wp:list-item --><!-- wp:list-item --><li>Elterngespräche</li><!-- /wp:list-item --><!-- wp:list-item --><li>Ganztagsangebot und Klassengemeinschaft</li><!-- /wp:list-item --></ul><!-- /wp:list --></div><!-- /wp:group -->
+</div><!-- /wp:group -->
+
+<!-- wp:paragraph {"className":"aws-komm-firstcontact"} --><p class="aws-komm-firstcontact"><strong>Schweigepflicht:</strong> Was du mir im Vertrauen erzählst, behalte ich für mich. Es gibt nur wenige Ausnahmen – darüber kläre ich dich vor einem Gespräch auf.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} --><h2 class="wp-block-heading">So erreichen Sie mich</h2><!-- /wp:heading -->
+<!-- wp:group {"className":"aws-card"} --><div class="wp-block-group aws-card"><!-- wp:paragraph --><p><strong>Markus Gohde</strong>, Schulsozialarbeiter<br>E-Mail: <a href="mailto:markus.gohde@schulzentrum-doerverden.de">markus.gohde@schulzentrum-doerverden.de</a><br>Telefon: <a href="tel:+4942341034">04234 1034</a></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Wer mich in der Schule nur schwer ansprechen mag, kann mich auch über das <strong>Diensthandy Schulsozialarbeit</strong> (z.&nbsp;B. per Messenger) erreichen:<br>Mobil: <a href="tel:+4915562656533">0155 62656533</a></p><!-- /wp:paragraph --></div><!-- /wp:group -->
+</div><!-- /wp:group -->
