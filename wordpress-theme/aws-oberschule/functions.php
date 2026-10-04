@@ -162,7 +162,7 @@ if ( ! function_exists( 'aws_mininav' ) ) {
 			'/#berichte'      => 'Aus dem Schulalltag',
 			'/#foerderverein' => 'Förderverein',
 			'/#team'          => 'Für Sie da',
-			'/#buecher'       => 'Schulstart',
+			'/#anmeldung'     => 'Schulstart',
 			'/kommunikation/' => 'Kommunikation',
 			'/service/'       => 'Service & Infos',
 			'/#kontakt'       => 'Kontakt',
