@@ -281,6 +281,271 @@ function aws_anmeldung_form() {
 }
 add_shortcode( 'aws_anmeldung', 'aws_anmeldung_form' );
 
+/** XML-Escape für den DaNiS-Export. */
+function aws_xml_esc( $s ) {
+	return htmlspecialchars( (string) $s, ENT_QUOTES | ENT_XML1, 'UTF-8' );
+}
+
+/** Erzeugt eine UUID (v4) für DaNiS-GUIDs. */
+function aws_uuid4() {
+	$d    = random_bytes( 16 );
+	$d[6] = chr( ( ord( $d[6] ) & 0x0f ) | 0x40 );
+	$d[8] = chr( ( ord( $d[8] ) & 0x3f ) | 0x80 );
+	$h    = bin2hex( $d );
+	return substr( $h, 0, 8 ) . '-' . substr( $h, 8, 4 ) . '-' . substr( $h, 12, 4 ) . '-' . substr( $h, 16, 4 ) . '-' . substr( $h, 20, 12 );
+}
+
+/** Zerlegt eine freie "PLZ Ort"-Angabe grob in array( plz, ort ). */
+function aws_split_plz_ort( $s ) {
+	$s   = trim( (string) $s );
+	$plz = '';
+	if ( preg_match( '/(\d{5})/', $s, $m ) ) {
+		$plz = $m[1];
+		$s   = trim( str_replace( $m[1], '', $s ), " ,\t" );
+	}
+	return array( $plz, trim( $s, " ,\t" ) );
+}
+
+/** Zerlegt eine freie Gesamtadresse ("Straße, PLZ Ort") grob in array( strasse, plz, ort ). */
+function aws_split_address( $s ) {
+	$s = trim( (string) $s );
+	if ( preg_match( '/^(.*?)(\d{5})\s*(.*)$/', $s, $m ) ) {
+		return array( trim( $m[1], " ,\t" ), $m[2], trim( $m[3], " ,\t" ) );
+	}
+	return array( $s, '', '' );
+}
+
+/** Zerlegt einen freien Namen grob in array( vorname, nachname ). */
+function aws_split_name( $full ) {
+	$full = trim( preg_replace( '/\s+/', ' ', (string) $full ) );
+	if ( '' === $full ) {
+		return array( '', '' );
+	}
+	if ( false !== strpos( $full, ',' ) ) {
+		$p = array_map( 'trim', explode( ',', $full, 2 ) );
+		return array( isset( $p[1] ) ? $p[1] : '', $p[0] ); // Format "Nachname, Vorname".
+	}
+	$parts = explode( ' ', $full );
+	if ( count( $parts ) === 1 ) {
+		return array( '', $parts[0] );
+	}
+	$nach = array_pop( $parts );
+	return array( implode( ' ', $parts ), $nach );
+}
+
+/** Baut einen <person>-Block für DaNiS. */
+function aws_danis_person( $ruf, $vornamen, $nach, $gebdat, $geschlecht, $strasse, $plz, $ort, $tel, $email ) {
+	$x  = "    <person>\n";
+	$x .= '      <rufname>' . aws_xml_esc( $ruf ) . "</rufname>\n";
+	$x .= "      <vorname></vorname>\n";
+	$x .= '      <vornamen>' . aws_xml_esc( $vornamen ) . "</vornamen>\n";
+	$x .= '      <nachname>' . aws_xml_esc( $nach ) . "</nachname>\n";
+	if ( '' !== $gebdat ) {
+		$x .= '      <geburtsdatum>' . aws_xml_esc( $gebdat ) . "</geburtsdatum>\n";
+	}
+	if ( '' !== $geschlecht ) {
+		$x .= '      <geschlecht>' . aws_xml_esc( $geschlecht ) . "</geschlecht>\n";
+	}
+	$x .= '      <guid>' . aws_uuid4() . "</guid>\n";
+	$x .= "      <adressen>\n        <adresse>\n          <hauptwohnsitz>true</hauptwohnsitz>\n          <ort>\n";
+	$x .= '            <name>' . aws_xml_esc( $ort ) . "</name>\n";
+	$x .= '            <plz>' . aws_xml_esc( $plz ) . "</plz>\n";
+	$x .= "          </ort>\n          <strasse>" . aws_xml_esc( $strasse ) . "</strasse>\n        </adresse>\n      </adressen>\n";
+	$k = '';
+	if ( '' !== $tel ) {
+		$k .= "        <kontakt typ=\"kaTelefon\">\n          <text>" . aws_xml_esc( $tel ) . "</text>\n        </kontakt>\n";
+	}
+	if ( '' !== $email ) {
+		$k .= "        <kontakt typ=\"kaEMail\">\n          <text>" . aws_xml_esc( $email ) . "</text>\n        </kontakt>\n";
+	}
+	$x .= ( '' !== $k ) ? "      <kontakte>\n" . $k . "      </kontakte>\n" : "      <kontakte/>\n";
+	$x .= "    </person>\n";
+	return $x;
+}
+
+/** Erzeugt die DaNiS-Importdatei (XML 1.5) aus den Anmeldedaten. */
+function aws_anmeldung_build_danis_xml( $v ) {
+	$sj_start = apply_filters( 'aws_anmeldung_schuljahr_start', '2026-08-01' );
+	$sj_label = apply_filters( 'aws_anmeldung_schuljahr_label', '26/27' );
+
+	$klasse       = $v( 'klassenstufe' );
+	$vorname_full = $v( 'vorname' );
+	$ruf          = trim( (string) strtok( $vorname_full, ' ' ) );
+	$nach         = $v( 'familienname' );
+	$gebdat       = $v( 'geburtstag' );
+	$g            = $v( 'geschlecht' );
+	$geschlecht   = ( 'weiblich' === $g ) ? 'gWeiblich' : ( ( 'männlich' === $g ) ? 'gMaennlich' : '' );
+	list( $plz, $ort ) = aws_split_plz_ort( $v( 'plz_ort' ) );
+	$strasse      = $v( 'anschrift' );
+	$tel          = $v( 'telefon' );
+	$email        = $v( 'email' );
+
+	$x  = '<?xml version="1.0"?>' . "\n";
+	$x .= '<danis xmlns="http://www.nils.nibis.de/DaNiS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.nils.nibis.de/DaNiS danis.xsd" version="1.5" programmversion="3.10" dbversion="3.10">' . "\n";
+	$x .= "  <schueler>\n";
+	$x .= aws_danis_person( $ruf, $vorname_full, $nach, $gebdat, $geschlecht, $strasse, $plz, $ort, $tel, $email );
+	$x .= '    <aufnahmedatum>' . aws_xml_esc( $sj_start ) . "</aufnahmedatum>\n";
+
+	$vonschule = $v( 'aufnahme_vonschule' );
+	if ( '' === $vonschule ) {
+		$vonschule = $v( 'grundschule_name' );
+	}
+	if ( '' === $vonschule ) {
+		$gs        = $v( 'gs' );
+		$vonschule = ( 'andere' === $gs ) ? $v( 'gs_andere' ) : $gs;
+	}
+	if ( '' !== $vonschule ) {
+		$x .= '    <vonschule>' . aws_xml_esc( $vonschule ) . "</vonschule>\n";
+	}
+
+	$einschul = $v( 'einschulungsjahr' );
+	if ( '' !== $einschul ) {
+		$x .= '    <ersteinschulJahr>' . aws_xml_esc( $einschul ) . "</ersteinschulJahr>\n";
+		$x .= '    <beginnschulpflicht>' . aws_xml_esc( $einschul ) . "</beginnschulpflicht>\n";
+	}
+
+	$konf = $v( 'konfession' );
+	if ( '' === $konf ) {
+		$konf = $v( 'konfession_sonstige' );
+	}
+	if ( '' !== $konf ) {
+		$kz = array( 'evangelisch' => '1', 'katholisch' => '2' );
+		if ( isset( $kz[ $konf ] ) ) {
+			$x .= '    <konfession kennzahl="' . $kz[ $konf ] . '">' . aws_xml_esc( $konf ) . "</konfession>\n";
+		} else {
+			$x .= '    <konfession>' . aws_xml_esc( $konf ) . "</konfession>\n";
+		}
+	}
+
+	$gebort = $v( 'geburtsort' );
+	if ( '' !== $gebort ) {
+		$x .= '    <geburtsort>' . aws_xml_esc( $gebort ) . "</geburtsort>\n";
+	}
+
+	$staat = $v( 'staatsangehoerigkeit' );
+	if ( '' === $staat || false !== stripos( $staat, 'deutsch' ) ) {
+		$x .= '    <staatsangehoerigkeitiso code="DE">Deutschland</staatsangehoerigkeitiso>' . "\n";
+	} else {
+		$x .= '    <staatsangehoerigkeitiso>' . aws_xml_esc( $staat ) . "</staatsangehoerigkeitiso>\n";
+	}
+
+	// Verantwortliche (Mutter / Vater), soweit angegeben.
+	$resp    = '';
+	$parents = array(
+		array( $v( 'mutter_name' ), $v( 'mutter_anschrift' ), $v( 'mutter_telefon' ), 'vaMutter', 'gWeiblich' ),
+		array( $v( 'vater_name' ), $v( 'vater_anschrift' ), $v( 'vater_telefon' ), 'vaVater', 'gMaennlich' ),
+	);
+	foreach ( $parents as $p ) {
+		if ( '' === trim( $p[0] ) ) {
+			continue;
+		}
+		list( $pvor, $pnach ) = aws_split_name( $p[0] );
+		if ( '' === $pnach ) {
+			$pnach = $nach;
+		}
+		$pstr = $strasse;
+		$pplz = $plz;
+		$port = $ort;
+		if ( '' !== trim( $p[1] ) ) {
+			list( $astr, $aplz, $aort ) = aws_split_address( $p[1] );
+			$pstr = ( '' !== $astr ) ? $astr : $p[1];
+			if ( '' !== $aplz ) {
+				$pplz = $aplz;
+				$port = ( '' !== $aort ) ? $aort : $ort;
+			}
+		}
+		$prolle = ( 'vaMutter' === $p[3] ) ? 'Mutter' : 'Vater';
+		$resp  .= "    <verantwortlicher>\n";
+		$resp  .= aws_danis_person( ( '' !== $pvor ? $pvor : $prolle ), $pvor, $pnach, '', $p[4], $pstr, $pplz, $port, $p[2], '' );
+		$resp  .= "      <erziehungsberechtigt>true</erziehungsberechtigt>\n";
+		$resp  .= '      <art>' . $p[3] . "</art>\n";
+		$resp  .= "      <erziehungsberechtigtdefault>true</erziehungsberechtigtdefault>\n";
+		$resp  .= '      <artdefault>' . $p[3] . "</artdefault>\n";
+		$resp  .= "    </verantwortlicher>\n";
+	}
+	if ( '' !== $resp ) {
+		$x .= "    <verantwortliche>\n" . $resp . "    </verantwortliche>\n";
+	}
+
+	if ( '5' === $klasse ) {
+		$x .= '    <herkunft kennzahl="01">Versetzung/Zugang aus dem vorhergehenden SJG - Grundschule</herkunft>' . "\n";
+	}
+
+	if ( 'Zwei Masernimpfungen' === $v( 'masern_status' ) ) {
+		$x .= "    <infektionsschutz>\n";
+		$x .= '      <nachweisdatum>' . aws_xml_esc( current_time( 'Y-m-d' ) ) . "</nachweisdatum>\n";
+		$x .= "      <nachweisart>Geimpft</nachweisart>\n";
+		$x .= "    </infektionsschutz>\n";
+	}
+
+	$x .= "    <jahrgangsdatenliste>\n      <jahrgangsdaten>\n";
+	$x .= "        <schulname>Aller-Weser-Oberschule Dörverden</schulname>\n";
+	$x .= '        <schulgliederungsbezeichnung>' . aws_xml_esc( $sj_label ) . "</schulgliederungsbezeichnung>\n";
+	$x .= '        <schulform kennzahl="40">Oberschule</schulform>' . "\n";
+	$x .= "        <gruppenbezeichnung></gruppenbezeichnung>\n";
+	$x .= '        <jahrgangsstufe>' . aws_xml_esc( $klasse ) . "</jahrgangsstufe>\n";
+	$x .= "        <foerderung>keine Förderung</foerderung>\n";
+	$x .= "        <belegungen/>\n        <sonderpaedbedarfe/>\n";
+	$x .= "      </jahrgangsdaten>\n    </jahrgangsdatenliste>\n";
+	$x .= "  </schueler>\n</danis>\n";
+	return $x;
+}
+
+/** Baut die E-Mail als druckbares Bestätigungs-Dokument (HTML) mit Unterschriftszeilen. */
+function aws_anmeldung_build_confirmation_html( $sections, $v, $vb, $attached_names ) {
+	$sj_label = apply_filters( 'aws_anmeldung_schuljahr_label', '26/27' );
+
+	$rows = '';
+	foreach ( $sections as $title => $fields ) {
+		$rows .= '<tr><td colspan="2" style="background:#e4eef3;color:#0b4680;font-weight:bold;padding:8px 10px;border-top:1px solid #cbdce6;">' . esc_html( $title ) . '</td></tr>';
+		foreach ( $fields as $key => $label ) {
+			if ( 0 === strpos( $key, '_cb_' ) ) {
+				$value = $vb( substr( $key, 4 ) );
+			} elseif ( 'krank_erkrankungen' === $key ) {
+				$value = sanitize_textarea_field( wp_unslash( isset( $_POST[ $key ] ) ? $_POST[ $key ] : '' ) );
+			} else {
+				$value = $v( $key );
+			}
+			if ( '' === $value ) {
+				$value = '—';
+			}
+			$rows .= '<tr><td style="padding:5px 10px;border-top:1px solid #eef2f4;color:#51707a;width:45%;vertical-align:top;">' . esc_html( $label ) . '</td><td style="padding:5px 10px;border-top:1px solid #eef2f4;color:#0f2a33;">' . nl2br( esc_html( $value ) ) . '</td></tr>';
+		}
+	}
+
+	$nach   = esc_html( $v( 'familienname' ) );
+	$vor    = esc_html( $v( 'vorname' ) );
+	$klasse = esc_html( $v( 'klassenstufe' ) );
+	$zeit   = esc_html( current_time( 'd.m.Y H:i' ) );
+	$nachw  = $attached_names ? esc_html( implode( ', ', $attached_names ) ) : 'Keine Dateien hochgeladen (ggf. Nachreichung).';
+
+	$h  = '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"></head>';
+	$h .= '<body style="margin:0;background:#ffffff;color:#0f2a33;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;">';
+	$h .= '<div style="max-width:720px;margin:0 auto;padding:24px;">';
+	$h .= '<div style="border-bottom:3px solid #1B6CA3;padding-bottom:10px;margin-bottom:16px;">';
+	$h .= '<div style="font-size:18px;font-weight:bold;color:#0b4680;">Aller-Weser-Oberschule Dörverden</div>';
+	$h .= '<div style="color:#51707a;font-size:12px;">Am Sünderberg 6, 27313 Dörverden · Tel. 04234 1034</div>';
+	$h .= '</div>';
+	$h .= '<h1 style="font-size:20px;margin:0 0 4px;">Anmeldung – Bestätigung der Angaben</h1>';
+	$h .= '<p style="margin:0 0 14px;color:#51707a;">Schuljahr ' . esc_html( $sj_label ) . ' · ' . $vor . ' ' . $nach . ' · Klasse ' . $klasse . ' · eingegangen am ' . $zeit . '</p>';
+	$h .= '<p style="margin:0 0 16px;">Bitte prüfen Sie die folgenden Angaben sorgfältig auf ihre Richtigkeit und bestätigen Sie diese mit Ihrer Unterschrift.</p>';
+	$h .= '<table style="width:100%;border-collapse:collapse;border:1px solid #cbdce6;font-size:13px;">' . $rows . '</table>';
+	$h .= '<p style="margin:16px 0 0;font-size:13px;color:#51707a;"><strong>Beigefügte Nachweise:</strong> ' . $nachw . '</p>';
+	$h .= '<div style="margin-top:22px;padding:14px 16px;border:1px solid #cbdce6;border-radius:6px;background:#f6fafb;">';
+	$h .= '<p style="margin:0 0 20px;"><strong>Bestätigung:</strong> Ich/Wir bestätige(n) die Richtigkeit und Vollständigkeit der oben gemachten Angaben.</p>';
+	$h .= '<table style="width:100%;border-collapse:collapse;"><tr>';
+	$h .= '<td style="width:50%;padding:22px 10px 0 0;vertical-align:bottom;"><div style="border-top:1px solid #0f2a33;padding-top:4px;color:#51707a;font-size:12px;">Ort, Datum</div></td>';
+	$h .= '<td style="width:50%;padding:22px 0 0 10px;vertical-align:bottom;"><div style="border-top:1px solid #0f2a33;padding-top:4px;color:#51707a;font-size:12px;">Unterschrift Erziehungsberechtigte/r 1</div></td>';
+	$h .= '</tr><tr>';
+	$h .= '<td style="padding:30px 10px 0 0;"></td>';
+	$h .= '<td style="padding:30px 0 0 10px;vertical-align:bottom;"><div style="border-top:1px solid #0f2a33;padding-top:4px;color:#51707a;font-size:12px;">Unterschrift Erziehungsberechtigte/r 2</div></td>';
+	$h .= '</tr></table>';
+	$h .= '</div>';
+	$h .= '<p style="margin:18px 0 0;font-size:11px;color:#8aa3ac;">Dieses Dokument wurde automatisch aus der Online-Anmeldung der Website erzeugt. Eine DaNiS-Importdatei (XML) für das Schulverwaltungsprogramm ist dieser E-Mail beigefügt. Bei gemeinsamem Sorgerecht ist die Unterschrift beider Erziehungsberechtigten erforderlich.</p>';
+	$h .= '</div></body></html>';
+	return $h;
+}
+
 /**
  * Verarbeitet die abgesendete Anmeldung und versendet sie per E-Mail.
  */
@@ -371,80 +636,65 @@ function aws_anmeldung_handle() {
 		),
 	);
 
-	$lines = array();
-	foreach ( $sections as $title => $fields ) {
-		$lines[] = '';
-		$lines[] = '== ' . $title . ' ==';
-		foreach ( $fields as $key => $label ) {
-			if ( 0 === strpos( $key, '_cb_' ) ) {
-				$real   = substr( $key, 4 );
-				$lines[] = $label . ': ' . $vb( $real );
-			} else {
-				$val = 'krank_erkrankungen' === $key
-					? sanitize_textarea_field( wp_unslash( isset( $_POST[ $key ] ) ? $_POST[ $key ] : '' ) )
-					: $v( $key );
-				$lines[] = $label . ': ' . ( '' !== $val ? $val : '—' );
+		// Datei-Uploads als Anhang (nur erlaubte Typen, temporär, danach löschen).
+		$file_fields = array(
+			'datei_zeugnis3'      => 'Versetzungszeugnis Kl. 3',
+			'datei_zeugnis4'      => 'Halbjahreszeugnis Kl. 4',
+			'datei_geburtsurkunde' => 'Geburtsurkunde',
+			'datei_impfnachweis'  => 'Masernschutz/Impfpass',
+			'datei_ermaessigung'  => 'Ermäßigung/Befreiung',
+			'datei_sorgerecht'    => 'Sorgerecht',
+		);
+		$allowed        = array( 'pdf' => 1, 'jpg' => 1, 'jpeg' => 1, 'png' => 1 );
+		$attachments    = array();
+		$tmp_created    = array();
+		$attached_names = array();
+		foreach ( $file_fields as $field => $flabel ) {
+			if ( empty( $_FILES[ $field ] ) || ! isset( $_FILES[ $field ]['error'] ) || UPLOAD_ERR_OK !== $_FILES[ $field ]['error'] ) {
+				continue;
+			}
+			if ( $_FILES[ $field ]['size'] <= 0 || $_FILES[ $field ]['size'] > 8 * 1024 * 1024 ) {
+				continue;
+			}
+			$name = sanitize_file_name( $_FILES[ $field ]['name'] );
+			$ext  = strtolower( pathinfo( $name, PATHINFO_EXTENSION ) );
+			if ( ! isset( $allowed[ $ext ] ) ) {
+				continue;
+			}
+			$dest = trailingslashit( get_temp_dir() ) . uniqid( 'aws_', true ) . '_' . $name;
+			if ( move_uploaded_file( $_FILES[ $field ]['tmp_name'], $dest ) ) {
+				$attachments[]    = $dest;
+				$tmp_created[]    = $dest;
+				$attached_names[] = $flabel . ' (' . $name . ')';
 			}
 		}
-	}
 
-	// Datei-Uploads als Anhang (nur erlaubte Typen, temporär, danach löschen).
-	$file_fields = array(
-		'datei_zeugnis3'      => 'Versetzungszeugnis Kl. 3',
-		'datei_zeugnis4'      => 'Halbjahreszeugnis Kl. 4',
-		'datei_geburtsurkunde' => 'Geburtsurkunde',
-		'datei_impfnachweis'  => 'Masernschutz/Impfpass',
-		'datei_ermaessigung'  => 'Ermäßigung/Befreiung',
-		'datei_sorgerecht'    => 'Sorgerecht',
-	);
-	$allowed     = array( 'pdf' => 1, 'jpg' => 1, 'jpeg' => 1, 'png' => 1 );
-	$attachments = array();
-	$tmp_created = array();
-	$attached_names = array();
-	foreach ( $file_fields as $field => $flabel ) {
-		if ( empty( $_FILES[ $field ] ) || ! isset( $_FILES[ $field ]['error'] ) || UPLOAD_ERR_OK !== $_FILES[ $field ]['error'] ) {
-			continue;
+		// DaNiS-Importdatei (XML) erzeugen und als Anhang beifügen.
+		$xml      = aws_anmeldung_build_danis_xml( $v );
+		$xml_name = 'DaNiS-Import-' . sanitize_file_name( $v( 'familienname' ) . '-' . $v( 'vorname' ) ) . '.xml';
+		$xml_path = trailingslashit( get_temp_dir() ) . uniqid( 'aws_danis_', true ) . '_' . $xml_name;
+		if ( false !== file_put_contents( $xml_path, $xml ) ) {
+			$attachments[] = $xml_path;
+			$tmp_created[] = $xml_path;
 		}
-		if ( $_FILES[ $field ]['size'] <= 0 || $_FILES[ $field ]['size'] > 8 * 1024 * 1024 ) {
-			continue;
+
+		$subject = sprintf( 'Online-Anmeldung: %s, %s (Klasse %s)', $v( 'familienname' ), $v( 'vorname' ), $v( 'klassenstufe' ) );
+
+		// E-Mail als druckbares Bestätigungs-Dokument (HTML) mit Unterschriftszeilen.
+		$body = aws_anmeldung_build_confirmation_html( $sections, $v, $vb, $attached_names );
+
+		$from    = apply_filters( 'aws_anmeldung_from', AWS_ANMELDUNG_FROM );
+		$headers = array(
+			'From: Online-Anmeldung <' . $from . '>',
+			'Content-Type: text/html; charset=UTF-8',
+		);
+		$parent_mail = sanitize_email( wp_unslash( isset( $_POST['email'] ) ? $_POST['email'] : '' ) );
+		if ( is_email( $parent_mail ) ) {
+			$headers[] = 'Reply-To: ' . $parent_mail;
 		}
-		$name = sanitize_file_name( $_FILES[ $field ]['name'] );
-		$ext  = strtolower( pathinfo( $name, PATHINFO_EXTENSION ) );
-		if ( ! isset( $allowed[ $ext ] ) ) {
-			continue;
-		}
-		$dest = trailingslashit( get_temp_dir() ) . uniqid( 'aws_', true ) . '_' . $name;
-		if ( move_uploaded_file( $_FILES[ $field ]['tmp_name'], $dest ) ) {
-			$attachments[]    = $dest;
-			$tmp_created[]    = $dest;
-			$attached_names[] = $flabel . ' (' . $name . ')';
-		}
-	}
 
-	$lines[] = '';
-	$lines[] = '== Beigefügte Nachweise ==';
-	$lines[] = $attached_names ? implode( "\n", $attached_names ) : 'Keine Dateien hochgeladen (ggf. Nachreichung).';
-
-	$lines[] = '';
-	$lines[] = '-- Gesendet über das Online-Anmeldeformular der Website --';
-	$lines[] = 'Zeitpunkt: ' . current_time( 'd.m.Y H:i' );
-
-	$body = implode( "\n", $lines );
-
-	$subject = sprintf( 'Online-Anmeldung: %s, %s (Klasse %s)', $v( 'familienname' ), $v( 'vorname' ), $v( 'klassenstufe' ) );
-
-	$from    = apply_filters( 'aws_anmeldung_from', AWS_ANMELDUNG_FROM );
-	$headers = array(
-		'From: Online-Anmeldung <' . $from . '>',
-		'Content-Type: text/plain; charset=UTF-8',
-	);
-	$parent_mail = sanitize_email( wp_unslash( isset( $_POST['email'] ) ? $_POST['email'] : '' ) );
-	if ( is_email( $parent_mail ) ) {
-		$headers[] = 'Reply-To: ' . $parent_mail;
-	}
-
-	$to   = apply_filters( 'aws_anmeldung_recipient', AWS_ANMELDUNG_TO );
-	$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
+		$to   = apply_filters( 'aws_anmeldung_recipient', AWS_ANMELDUNG_TO );
+		$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
 
 	foreach ( $tmp_created as $f ) {
 		@unlink( $f ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
