@@ -2,8 +2,9 @@
 
 Eine schlanke, selbst gehostete Web-Anwendung, mit der sich Eltern online
 anmelden können – für die **neuen fünften Klassen** oder für eine **Aufnahme im
-laufenden Schuljahr**. Die Schulverwaltung kann die gesammelten Daten als
-**CSV** exportieren und in das Schulverwaltungsprogramm **Danis** übernehmen.
+laufenden Schuljahr**. Die Schulverwaltung lädt die Anmeldungen als
+**DaNiS-XML** herunter und importiert sie direkt in das Schulverwaltungsprogramm
+**DaNiS** – ohne Abtippen. Ein CSV-Export ist zusätzlich vorhanden.
 
 Technik: Python + Flask, SQLite als Datenspeicher, keine externen Dienste/CDNs.
 
@@ -32,7 +33,33 @@ Die Anwendung läuft dann auf http://127.0.0.1:5000
 
 ---
 
-## Danis-Export anpassen  ← wichtig
+## DaNiS-XML-Import  ← empfohlener Weg
+
+Im Verwaltungsbereich (`/admin`) gibt es:
+
+- **„Neue als DaNiS-XML“** – alle noch nicht exportierten Anmeldungen in einer Datei,
+- **„Alle als DaNiS-XML“** – alle Anmeldungen,
+- **„XML“** in jeder Zeile bzw. auf der Detailseite – eine einzelne Anmeldung
+  (Dateiname wie in DaNiS, z. B. `MustermannMax.xml`).
+
+Die Datei folgt dem DaNiS-Austauschformat (Version 1.5, wie es DaNiS 3.10
+selbst exportiert). DaNiS legt beim Import die Schülerin/den Schüler samt
+Erziehungsberechtigten an.
+
+Erzeugt werden: Namen, Geburtsdatum/-ort, Geschlecht, Anschrift,
+Erziehungsberechtigte mit Telefon/E-Mail und Sorgerecht, Aufnahmedatum
+(Klasse 5 ohne Angabe: nächster 1. August), bisherige Schule, Schuljahr,
+Jahrgangsstufe und Schulform. **Nach dem Import im Sekretariat ergänzen:**
+Klasse, Identnummer (vergibt DaNiS) sowie Konfession/Staatsangehörigkeit,
+falls deren Schlüsselzahl in der App noch nicht hinterlegt ist.
+
+Schulform und Schlüsselzahlen (Konfession, Staatsangehörigkeit, Herkunft)
+stehen oben in **`danis_xml.py`** und lassen sich dort ergänzen. Der Schulname
+kommt aus `SCHULNAME` in der `.env` und sollte exakt wie in DaNiS lauten.
+
+---
+
+## Danis-CSV-Export anpassen
 
 Das genaue Importformat von Danis ist je nach Schule/Version unterschiedlich.
 Die komplette Spaltenzuordnung steckt in **einer einzigen Datei**:
@@ -106,8 +133,8 @@ pip install pytest
 pytest
 ```
 
-Die Tests decken Formularabsenden, Validierung, Honeypot, Admin-Login und den
-CSV-Export ab.
+Die Tests decken Formularabsenden, Validierung, Honeypot, Admin-Login sowie den
+CSV- und DaNiS-XML-Export ab.
 
 ---
 
@@ -119,6 +146,7 @@ CSV-Export ab.
 | `config.py`         | Konfiguration (aus Umgebungsvariablen)               |
 | `models.py`         | Datenmodell einer Anmeldung                          |
 | `forms.py`          | Formular + serverseitige Validierung                 |
+| `danis_xml.py`      | DaNiS-XML-Erzeugung (Schlüsselzahlen oben anpassbar) |
 | `export.py`         | CSV-Erzeugung                                         |
 | **`mapping.py`**    | **Danis-Spaltenzuordnung – hier anpassen**           |
 | `templates/`        | HTML-Vorlagen                                         |

@@ -10,6 +10,8 @@ Routen:
   /admin/<id>       -> Detailansicht einer Anmeldung (geschützt)
   /admin/<id>/loeschen (POST)  -> Anmeldung löschen (DSGVO)
   /admin/export     -> CSV-Export für Danis (geschützt)
+  /admin/export.xml -> DaNiS-XML aller (bzw. ?nur=offen neuen) Anmeldungen
+  /admin/<id>/danis.xml -> DaNiS-XML einer einzelnen Anmeldung
 """
 
 import time
@@ -29,6 +31,7 @@ from flask import (
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 
+import danis_xml
 import export
 from config import Config
 from forms import AnmeldungForm, LoginForm
@@ -163,29 +166,52 @@ def create_app(config_object=Config):
         flash("Anmeldung wurde gelöscht.", "ok")
         return redirect(url_for("admin"))
 
-    @app.route("/admin/export")
-    @login_erforderlich
-    def admin_export():
+    def _fuer_export():
         # nur=offen -> nur noch nicht als exportiert markierte Datensätze
-        nur_offen = request.args.get("nur") == "offen"
         query = Anmeldung.query.order_by(Anmeldung.schueler_nachname)
-        if nur_offen:
+        if request.args.get("nur") == "offen":
             query = query.filter_by(exportiert=False)
-        anmeldungen = query.all()
+        return query.all()
 
-        inhalt = export.erzeuge_csv(anmeldungen)
-
+    def _als_download(anmeldungen, inhalt, mimetype, dateiname):
         # Datensätze als exportiert markieren.
         for a in anmeldungen:
             a.exportiert = True
         db.session.commit()
-
         return Response(
             inhalt,
-            mimetype="text/csv",
-            headers={
-                "Content-Disposition": "attachment; filename=danis_anmeldungen.csv"
-            },
+            mimetype=mimetype,
+            headers={"Content-Disposition": f"attachment; filename={dateiname}"},
+        )
+
+    @app.route("/admin/export")
+    @login_erforderlich
+    def admin_export():
+        anmeldungen = _fuer_export()
+        inhalt = export.erzeuge_csv(anmeldungen)
+        return _als_download(anmeldungen, inhalt, "text/csv", "danis_anmeldungen.csv")
+
+    @app.route("/admin/export.xml")
+    @login_erforderlich
+    def admin_export_xml():
+        anmeldungen = _fuer_export()
+        if not anmeldungen:
+            flash("Keine Anmeldungen für den Export vorhanden.", "fehler")
+            return redirect(url_for("admin"))
+        inhalt = danis_xml.erzeuge_xml(anmeldungen, app.config["SCHULNAME"])
+        return _als_download(
+            anmeldungen, inhalt, "application/xml", "danis_anmeldungen.xml"
+        )
+
+    @app.route("/admin/<int:anmeldung_id>/danis.xml")
+    @login_erforderlich
+    def admin_export_xml_einzeln(anmeldung_id):
+        eintrag = db.session.get(Anmeldung, anmeldung_id)
+        if eintrag is None:
+            abort(404)
+        inhalt = danis_xml.erzeuge_xml([eintrag], app.config["SCHULNAME"])
+        return _als_download(
+            [eintrag], inhalt, "application/xml", danis_xml.dateiname(eintrag)
         )
 
     return app

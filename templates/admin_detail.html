@@ -8,6 +8,7 @@
 {% block inhalt %}
   <p><a href="{{ url_for('admin') }}">&larr; Zurück zur Liste</a></p>
   <h1>{{ a.anzeigename() }}</h1>
+  <p><a class="knopf" href="{{ url_for('admin_export_xml_einzeln', anmeldung_id=a.id) }}">Als DaNiS-XML herunterladen</a></p>
 
   <h2>Kind</h2>
   <table class="tabelle tabelle-detail">

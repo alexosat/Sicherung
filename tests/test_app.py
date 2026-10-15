@@ -161,3 +161,111 @@ def test_loeschen(client, app):
     client.post(f"/admin/{anmeldung_id}/loeschen")
     with app.app_context():
         assert Anmeldung.query.count() == 0
+
+
+# ---- DaNiS-XML-Export -----------------------------------------------------
+
+import xml.etree.ElementTree as ET  # noqa: E402
+
+NS = {"d": "http://www.nils.nibis.de/DaNiS"}
+
+
+def _xml_export(client, url="/admin/export.xml"):
+    client.post("/admin/login", data={"passwort": "geheim"})
+    r = client.get(url)
+    assert r.status_code == 200
+    assert "xml" in r.content_type
+    return ET.fromstring(r.data)
+
+
+def test_xml_export_schueler(client, app):
+    client.post(
+        "/anmeldung",
+        data=_gueltige_daten(
+            schueler_vorname="Max Udo",
+            schueler_rufname="Max",
+            geschlecht="männlich",
+            konfession="evangelisch",
+            staatsangehoerigkeit="deutsch",
+            geburtsort="Verden",
+            eb1_anrede="Frau",
+            eb1_verhaeltnis="Mutter",
+            eb1_telefon="0111 01010101",
+        ),
+    )
+    wurzel = _xml_export(client)
+    assert wurzel.get("version") == "1.5"
+    s = wurzel.find("d:schueler", NS)
+    assert s.findtext("d:person/d:rufname", namespaces=NS) == "Max"
+    assert s.findtext("d:person/d:vornamen", namespaces=NS) == "Max Udo"
+    assert s.findtext("d:person/d:nachname", namespaces=NS) == "Mustermann"
+    assert s.findtext("d:person/d:geburtsdatum", namespaces=NS) == "2015-06-01"
+    assert s.findtext("d:person/d:geschlecht", namespaces=NS) == "gMaennlich"
+    assert (
+        s.findtext("d:person/d:adressen/d:adresse/d:strasse", namespaces=NS)
+        == "Hauptstraße 1"
+    )
+    assert s.find("d:konfession", NS).get("kennzahl") == "1"
+    assert s.find("d:staatsangehoerigkeitiso", NS).get("code") == "DE"
+    assert s.find("d:herkunft", NS).get("kennzahl") == "01"
+
+    eb = s.find("d:verantwortliche/d:verantwortlicher", NS)
+    assert eb.findtext("d:art", namespaces=NS) == "vaMutter"
+    assert eb.findtext("d:person/d:geschlecht", namespaces=NS) == "gWeiblich"
+    assert eb.findtext("d:erziehungsberechtigt", namespaces=NS) == "true"
+    kontakte = {
+        k.get("typ"): k.findtext("d:text", namespaces=NS)
+        for k in eb.findall("d:person/d:kontakte/d:kontakt", NS)
+    }
+    assert kontakte == {"kaTelefon": "0111 01010101", "kaEMail": "erika@example.org"}
+
+    jg = s.find("d:jahrgangsdatenliste/d:jahrgangsdaten", NS)
+    assert jg.findtext("d:jahrgangsstufe", namespaces=NS) == "5"
+    assert jg.find("d:schulform", NS).get("kennzahl") == "40"
+    with app.app_context():
+        assert Anmeldung.query.first().exportiert is True
+
+
+def test_xml_unbekannte_kennzahl_wird_weggelassen(client):
+    client.post("/anmeldung", data=_gueltige_daten(konfession="Pastafari"))
+    s = _xml_export(client).find("d:schueler", NS)
+    assert s.find("d:konfession", NS) is None
+
+
+def test_xml_guid_bleibt_stabil(client):
+    client.post("/anmeldung", data=_gueltige_daten())
+    eins = _xml_export(client).findtext("d:schueler/d:person/d:guid", namespaces=NS)
+    zwei = _xml_export(client).findtext("d:schueler/d:person/d:guid", namespaces=NS)
+    assert eins and eins == zwei
+
+
+def test_xml_einzeln_und_nur_offen(client, app):
+    client.post("/anmeldung", data=_gueltige_daten())
+    _xml_export(client)  # markiert als exportiert
+    client.post(
+        "/anmeldung",
+        data=_gueltige_daten(schueler_nachname="Zweitkind", eb1_nachname="Zweitkind"),
+    )
+    wurzel = _xml_export(client, "/admin/export.xml?nur=offen")
+    namen = [n.text for n in wurzel.findall("d:schueler/d:person/d:nachname", NS)]
+    assert namen == ["Zweitkind"]
+
+    with app.app_context():
+        anmeldung_id = Anmeldung.query.filter_by(schueler_nachname="Zweitkind").first().id
+    r = client.get(f"/admin/{anmeldung_id}/danis.xml")
+    assert "ZweitkindMax.xml" in r.headers["Content-Disposition"]
+
+
+def test_xml_laufendes_schuljahr(client):
+    client.post(
+        "/anmeldung",
+        data=_gueltige_daten(
+            anmeldeart="laufend", klassenstufe="7", aufnahmedatum="2027-02-01"
+        ),
+    )
+    s = _xml_export(client).find("d:schueler", NS)
+    assert s.findtext("d:aufnahmedatum", namespaces=NS) == "2027-02-01"
+    assert s.find("d:herkunft", NS) is None
+    jg = s.find("d:jahrgangsdatenliste/d:jahrgangsdaten", NS)
+    assert jg.findtext("d:jahrgangsstufe", namespaces=NS) == "7"
+    assert jg.findtext("d:schulgliederungsbezeichnung", namespaces=NS) == "26/27"
