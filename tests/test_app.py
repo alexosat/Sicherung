@@ -279,3 +279,10 @@ def test_detailseite(client, app):
     r = client.get(f"/admin/{anmeldung_id}")
     assert r.status_code == 200
     assert "Als DaNiS-XML herunterladen".encode() in r.data
+
+
+def test_pflichtfelder_haben_sternchen(client):
+    html = client.get("/anmeldung").data.decode()
+    assert "Nachname des Kindes *" in html
+    assert "Geburtsdatum *" in html
+    assert "Rufname *" not in html  # optionales Feld ohne Sternchen

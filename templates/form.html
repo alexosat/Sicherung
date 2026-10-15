@@ -3,7 +3,11 @@
 
 {% macro feld(f) %}
   <div class="feld{% if f.errors %} feld-fehler{% endif %}">
-    {{ f.label }}
+    {% if f.flags.required %}
+      {{ f.label(text=f.label.text ~ " *") }}
+    {% else %}
+      {{ f.label }}
+    {% endif %}
     {{ f() }}
     {% for e in f.errors %}<span class="fehlertext">{{ e }}</span>{% endfor %}
   </div>
@@ -107,9 +111,9 @@
       <legend>Datenschutz</legend>
       <div class="feld feld-einwilligung{% if form.einwilligung.errors %} feld-fehler{% endif %}">
         <label>{{ form.einwilligung() }}
-          Ich habe die <a href="{{ url_for('datenschutz') }}" target="_blank">Datenschutzerklärung</a>
+          <span>Ich habe die <a href="{{ url_for('datenschutz') }}" target="_blank">Datenschutzerklärung</a>
           gelesen und willige in die Verarbeitung der angegebenen Daten zum
-          Zweck der Schulanmeldung ein.</label>
+          Zweck der Schulanmeldung ein. *</span></label>
         {% for e in form.einwilligung.errors %}<span class="fehlertext">{{ e }}</span>{% endfor %}
       </div>
     </fieldset>
