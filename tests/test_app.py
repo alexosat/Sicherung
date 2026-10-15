@@ -269,3 +269,13 @@ def test_xml_laufendes_schuljahr(client):
     jg = s.find("d:jahrgangsdatenliste/d:jahrgangsdaten", NS)
     assert jg.findtext("d:jahrgangsstufe", namespaces=NS) == "7"
     assert jg.findtext("d:schulgliederungsbezeichnung", namespaces=NS) == "26/27"
+
+
+def test_detailseite(client, app):
+    client.post("/anmeldung", data=_gueltige_daten())
+    client.post("/admin/login", data={"passwort": "geheim"})
+    with app.app_context():
+        anmeldung_id = Anmeldung.query.first().id
+    r = client.get(f"/admin/{anmeldung_id}")
+    assert r.status_code == 200
+    assert "Als DaNiS-XML herunterladen".encode() in r.data

@@ -28,6 +28,7 @@ from flask import (
     session,
     url_for,
 )
+from flask_wtf.csrf import CSRFProtect
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -45,6 +46,9 @@ def create_app(config_object=Config):
     # Hinter einem Reverse-Proxy (nginx) die X-Forwarded-* Header auswerten,
     # damit die App HTTPS erkennt (nötig für sichere Cookies / korrekte URLs).
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
+    # CSRF-Schutz für alle POST-Anfragen (auch das Löschen im Admin-Bereich).
+    CSRFProtect(app)
 
     db.init_app(app)
     with app.app_context():
