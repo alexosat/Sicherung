@@ -55,7 +55,7 @@ function aws_anmeldung_form() {
 	if ( 'error' === $status ) {
 		echo '<div class="aws-form-err" role="alert">'
 			. '<strong>Die Anmeldung konnte nicht gesendet werden.</strong> '
-			. 'Bitte prüfen Sie die Pflichtfelder (mit * markiert) und die Datenschutz-Einwilligung und versuchen Sie es erneut.</div>';
+			. 'Bitte prüfen Sie die Pflichtfelder (mit * markiert), die Sicherheitsfrage und die Datenschutz-Einwilligung und versuchen Sie es erneut.</div>';
 	}
 
 	$action = esc_url( admin_url( 'admin-post.php' ) );
@@ -273,6 +273,17 @@ function aws_anmeldung_form() {
 				<label><input type="checkbox" name="datenschutz" value="ja" required> Ich habe die <strong>Datenschutzhinweise</strong> gelesen und willige in die Verarbeitung der angegebenen Daten zum Zweck der Anmeldung/Aufnahme ein. <span class="req">*</span></label>
 			</div>
 			<p class="hint" style="margin-top:1rem">Bei gemeinsamem Sorgerecht ist die Bestätigung beider Erziehungsberechtigten erforderlich. Verantwortlich: Aller-Weser-Oberschule Dörverden, Am Sünderberg 6, 27313 Dörverden.</p>
+			<?php
+			$cap_a   = wp_rand( 1, 9 );
+			$cap_b   = wp_rand( 1, 9 );
+			$cap_ts  = time();
+			$cap_tok = hash_hmac( 'sha256', ( $cap_a + $cap_b ) . '|' . $cap_ts, wp_salt( 'auth' ) );
+			?>
+			<div class="subhead">Sicherheitsfrage <span class="req">*</span></div>
+			<p class="hint">Zum Schutz vor automatisierten Anmeldungen bitte kurz bestätigen.</p>
+			<div class="grid"><div><label>Wie viel ist <?php echo (int) $cap_a; ?> + <?php echo (int) $cap_b; ?>?</label><input type="number" name="aws_cap" inputmode="numeric" autocomplete="off" required></div></div>
+			<input type="hidden" name="aws_cap_ts" value="<?php echo (int) $cap_ts; ?>">
+			<input type="hidden" name="aws_cap_tok" value="<?php echo esc_attr( $cap_tok ); ?>">
 			<div class="actions"><button type="submit" class="btn">Anmeldung absenden</button></div>
 		</fieldset>
 	</form>
@@ -564,6 +575,17 @@ function aws_anmeldung_handle() {
 	// Spam-Schutz (Honeypot): stumm als "ok" behandeln.
 	if ( ! empty( $_POST['aws_hp'] ) ) {
 		wp_safe_redirect( add_query_arg( 'aws_anmeldung', 'ok', $back ) );
+		exit;
+	}
+
+	// Sicherheitsfrage (Rechenaufgabe) + Zeitfalle – ohne externe Dienste, serverseitig geprüft.
+	$cap_ans = isset( $_POST['aws_cap'] ) ? preg_replace( '/\D+/', '', (string) wp_unslash( $_POST['aws_cap'] ) ) : '';
+	$cap_ts  = isset( $_POST['aws_cap_ts'] ) ? absint( $_POST['aws_cap_ts'] ) : 0;
+	$cap_tok = isset( $_POST['aws_cap_tok'] ) ? (string) wp_unslash( $_POST['aws_cap_tok'] ) : '';
+	$cap_cmp = ( '' !== $cap_ans && $cap_ts > 0 ) ? hash_hmac( 'sha256', $cap_ans . '|' . $cap_ts, wp_salt( 'auth' ) ) : '';
+	$cap_age = time() - $cap_ts;
+	if ( '' === $cap_tok || '' === $cap_cmp || ! hash_equals( $cap_cmp, $cap_tok ) || $cap_age < 4 || $cap_age > 21600 ) {
+		wp_safe_redirect( add_query_arg( 'aws_anmeldung', 'error', $back ) );
 		exit;
 	}
 
