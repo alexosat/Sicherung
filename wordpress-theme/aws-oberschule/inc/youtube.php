@@ -252,3 +252,115 @@ function aws_youtube_shortcode() {
 	return trim( ob_get_clean() );
 }
 add_shortcode( 'aws_youtube', 'aws_youtube_shortcode' );
+
+/**
+ * Video-ID (11 Zeichen) aus einer beliebigen YouTube-URL herauslösen.
+ */
+function aws_youtube_id_from_url( $url ) {
+	$url = (string) $url;
+	if ( '' === $url ) {
+		return '';
+	}
+	if ( preg_match( '~(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:embed/|shorts/|v/|watch\?(?:[^ ]*&)?v=))([A-Za-z0-9_-]{11})~i', $url, $m ) ) {
+		return $m[1];
+	}
+	return '';
+}
+
+/**
+ * Macht einen fertigen YouTube-Embed (iframe) datenschutzfreundlich:
+ * stellt auf youtube-nocookie.com um und ersetzt das sofort ladende iframe
+ * durch eine Klick-zum-Laden-Vorschau (mit echtem, lokal gecachtem Bild,
+ * sofern ermittelbar). So lädt der native WordPress-YouTube-Block erst nach
+ * ausdrücklichem Klick – vorher keine Verbindung zu YouTube/Google.
+ *
+ * @param string $html  Vom oEmbed/Block erzeugtes HTML (enthält ein <iframe>).
+ * @param string $url   Ursprüngliche YouTube-URL (für die Video-ID).
+ * @param string $align Block-Ausrichtung ('', 'wide', 'full').
+ * @return string
+ */
+function aws_youtube_privacy_wrap( $html, $url = '', $align = '' ) {
+	if ( false !== strpos( (string) $html, 'aws-yt-embed' ) ) {
+		return $html; // Bereits umgebaut – nicht doppelt verarbeiten.
+	}
+	if ( ! preg_match( '/<iframe[^>]+src=(["\'])(.*?)\1/i', $html, $m ) ) {
+		return $html; // Kein Player (z. B. nur ein Link) – unverändert lassen.
+	}
+	$src = html_entity_decode( $m[2], ENT_QUOTES );
+	if ( false === stripos( $src, 'youtube.com/embed' ) && false === stripos( $src, 'youtube-nocookie.com/embed' ) ) {
+		return $html; // Kein YouTube-Player.
+	}
+
+	// Auf die cookielose Variante umstellen.
+	$src = preg_replace( '~^(https?:)?//(?:www\.)?youtube\.com/~i', 'https://www.youtube-nocookie.com/', $src );
+
+	// Video-ID (für das Vorschaubild) – erst aus der Original-URL, sonst aus dem iframe-src.
+	$vid    = aws_youtube_id_from_url( $url );
+	if ( '' === $vid ) {
+		$vid = aws_youtube_id_from_url( $src );
+	}
+	$poster = $vid ? aws_youtube_poster_url( $vid ) : '';
+
+	$classes = 'aws-yt aws-yt-embed';
+	if ( 'wide' === $align ) {
+		$classes .= ' alignwide';
+	} elseif ( 'full' === $align ) {
+		$classes .= ' alignfull';
+	}
+	if ( '' !== $poster ) {
+		$classes .= ' has-poster';
+	}
+
+	$logo = '<span class="aws-yt-wordmark" aria-hidden="true"><svg viewBox="0 0 28 20" width="28" height="20" focusable="false"><rect width="28" height="20" rx="5" fill="#FF0000"/><path d="M11 6 L19 10 L11 14 Z" fill="#fff"/></svg></span>';
+
+	ob_start();
+	?>
+	<div class="<?php echo esc_attr( $classes ); ?>" data-src="<?php echo esc_url( $src ); ?>">
+		<div class="aws-yt-facade">
+			<button type="button" class="aws-yt-load aws-yt-poster<?php echo '' === $poster ? ' aws-yt-poster-plain' : ''; ?>"<?php echo '' !== $poster ? ' style="background-image:url(' . esc_url( $poster ) . ')"' : ''; ?> aria-label="Video abspielen">
+				<span class="aws-yt-play-big" aria-hidden="true"></span>
+				<?php echo $logo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</button>
+			<p class="aws-yt-note">Erst beim Klick wird YouTube geladen – vorher werden keine Daten an Google übertragen.</p>
+		</div>
+	</div>
+	<?php
+	return trim( ob_get_clean() );
+}
+
+/**
+ * Nativen WordPress-Embed-Block (core/embed) für YouTube datenschutzfreundlich
+ * umbauen.
+ */
+function aws_youtube_filter_block( $block_content, $block ) {
+	if ( empty( $block['blockName'] ) || 'core/embed' !== $block['blockName'] ) {
+		return $block_content;
+	}
+	$url  = isset( $block['attrs']['url'] ) ? $block['attrs']['url'] : '';
+	$slug = isset( $block['attrs']['providerNameSlug'] ) ? $block['attrs']['providerNameSlug'] : '';
+
+	$is_yt = ( 'youtube' === $slug )
+		|| ( $url && preg_match( '~(youtube\.com|youtu\.be)~i', $url ) )
+		|| ( false !== strpos( $block_content, 'youtube.com/embed' ) )
+		|| ( false !== strpos( $block_content, 'youtube-nocookie.com/embed' ) );
+
+	if ( ! $is_yt ) {
+		return $block_content;
+	}
+
+	$align = isset( $block['attrs']['align'] ) ? $block['attrs']['align'] : '';
+	return aws_youtube_privacy_wrap( $block_content, $url, $align );
+}
+add_filter( 'render_block', 'aws_youtube_filter_block', 10, 2 );
+
+/**
+ * Auch klassische Auto-Embeds (eine YouTube-URL allein in einer Zeile)
+ * datenschutzfreundlich umbauen.
+ */
+function aws_youtube_filter_oembed( $html, $url ) {
+	if ( ! $url || ! preg_match( '~(youtube\.com|youtu\.be)~i', $url ) ) {
+		return $html;
+	}
+	return aws_youtube_privacy_wrap( $html, $url, '' );
+}
+add_filter( 'embed_oembed_html', 'aws_youtube_filter_oembed', 10, 2 );

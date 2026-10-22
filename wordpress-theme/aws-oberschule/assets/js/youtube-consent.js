@@ -8,6 +8,14 @@
   "use strict";
 
   function buildSrc(el) {
+    // Nativer WordPress-Embed-Block: fertige (bereits auf nocookie umgestellte) URL.
+    var direct = el.getAttribute("data-src");
+    if (direct) {
+      if (direct.indexOf("autoplay=") === -1) {
+        direct += (direct.indexOf("?") === -1 ? "?" : "&") + "autoplay=1";
+      }
+      return direct;
+    }
     var video = el.getAttribute("data-video");
     var list = el.getAttribute("data-list");
     var base = "https://www.youtube-nocookie.com/embed/";
@@ -29,7 +37,10 @@
 
     var frame = document.createElement("iframe");
     frame.setAttribute("src", src);
-    frame.setAttribute("title", "YouTube-Kanal Schulhofgeflüster – neueste Folge");
+    frame.setAttribute(
+      "title",
+      el.getAttribute("data-src") ? "YouTube-Video" : "YouTube-Kanal Schulhofgeflüster – neueste Folge"
+    );
     frame.setAttribute(
       "allow",
       "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -45,7 +56,7 @@
   }
 
   function init() {
-    var nodes = document.querySelectorAll(".aws-yt[data-video], .aws-yt[data-list]");
+    var nodes = document.querySelectorAll(".aws-yt[data-video], .aws-yt[data-list], .aws-yt[data-src]");
     Array.prototype.forEach.call(nodes, function (el) {
       var btn = el.querySelector(".aws-yt-load");
       if (!btn || btn.tagName === "A") return; // Reiner Kanal-Link: nichts zu laden.
