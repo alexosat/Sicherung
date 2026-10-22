@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Online-Anmeldung (Aufnahmebogen): Shortcode [aws_anmeldung] + E-Mail-Versand.
 require_once get_theme_file_path( 'inc/anmeldung-form.php' );
 
+// YouTube „Neueste Folge“ (Schulhofgeflüster): Shortcode [aws_youtube], Klick-zum-Laden.
+require_once get_theme_file_path( 'inc/youtube.php' );
+
 if ( ! function_exists( 'aws_setup' ) ) {
 	function aws_setup() {
 		add_theme_support( 'wp-block-styles' );
@@ -93,6 +96,14 @@ if ( ! function_exists( 'aws_enqueue' ) ) {
 		wp_enqueue_script(
 			'aws-campus-map',
 			get_theme_file_uri( 'assets/js/campus-map.js' ),
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			true
+		);
+		// YouTube „Neueste Folge“ mit Klick-zum-Laden (Datenschutz).
+		wp_enqueue_script(
+			'aws-youtube-consent',
+			get_theme_file_uri( 'assets/js/youtube-consent.js' ),
 			array(),
 			wp_get_theme()->get( 'Version' ),
 			true
