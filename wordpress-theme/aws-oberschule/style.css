@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.34.0
+Version: 1.35.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -560,6 +560,14 @@ a:focus-visible, .wp-block-button__link:focus-visible, .wp-block-navigation a:fo
 .aws-visual.has-img > svg, .aws-visual.has-img > img{
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
 }
+
+/* Foto-Bänder (volle Breite) und eingefasste Fotos */
+.aws-band{ position:relative; width:100%; max-height:400px; overflow:hidden; line-height:0; }
+.aws-band img{ display:block; width:100%; height:100%; max-height:400px; object-fit:cover; object-position:center; }
+.aws-band-label .aws-band-cap{ position:absolute; left:clamp(1.1rem,4vw,2.4rem); bottom:1.1rem; line-height:1.2; background:rgba(0,0,0,.5); color:#fff; font-weight:600; font-size:.95rem; letter-spacing:.02em; padding:.5rem 1.1rem; border-radius:100px; }
+.aws-figure{ margin:1.7rem 0 0; border-radius:var(--aws-radius); overflow:hidden; box-shadow:var(--aws-shadow); aspect-ratio:16/9; }
+.aws-figure img{ display:block; width:100%; height:100%; object-fit:cover; }
+@media (max-width:700px){ .aws-band, .aws-band img{ max-height:230px; } }
 
 /* Enge Abstaende im Kopf-Markenblock (WP-Block-Gap neutralisieren) */
 .masthead-brand{ gap:.35rem; }
