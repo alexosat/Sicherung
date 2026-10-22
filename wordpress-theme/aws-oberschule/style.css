@@ -3,7 +3,7 @@ Theme Name: Aller-Weser-Oberschule
 Theme URI: https://obs-doerverden.de
 Author: Aller-Weser-Oberschule Dörverden
 Description: Maßgeschneidertes Block-Theme (Full Site Editing) für die Landingpage der Aller-Weser-Oberschule Dörverden. Modernes, barrierearmes Design in den Schulfarben, Schriften lokal eingebunden. Alle Abschnitte im WordPress-Editor bearbeitbar.
-Version: 1.33.0
+Version: 1.33.1
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -361,6 +361,23 @@ a{ color: var(--c-primary); }
 .aws-yt-load:hover{ background:#e50000; transform:translateY(-2px); color:#fff; }
 .aws-yt-play{ width:0; height:0; border-style:solid; border-width:6px 0 6px 11px; border-color:transparent transparent transparent #fff; display:inline-block; }
 .aws-yt .aws-yt-note{ margin:.9rem 0 0 !important; font-size:.76rem !important; color:rgba(255,255,255,.62) !important; line-height:1.45; }
+
+/* Variante mit echtem Vorschaubild – sieht aus wie ein eingebetteter Player */
+.aws-yt.has-poster .aws-yt-facade{ padding:0; background:none; border:0; box-shadow:none; }
+.aws-yt-poster{ position:relative; display:block; width:100%; aspect-ratio:16/9; border:0; padding:0; margin:0; border-radius:var(--aws-radius); overflow:hidden; cursor:pointer; background-color:#000; background-size:cover; background-position:center; box-shadow:var(--aws-shadow); transition:transform .18s ease, box-shadow .18s ease; }
+.aws-yt-poster::before{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,.45) 100%); transition:background .18s ease; }
+.aws-yt-poster:hover{ transform:translateY(-2px); box-shadow:var(--aws-shadow), 0 12px 30px -10px rgba(0,0,0,.4); }
+.aws-yt-poster:hover::before{ background:linear-gradient(180deg, rgba(0,0,0,.12) 0%, rgba(0,0,0,.05) 35%, rgba(0,0,0,.5) 100%); }
+.aws-yt-poster:focus-visible{ outline:3px solid var(--c-primary); outline-offset:3px; }
+.aws-yt-play-big{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:68px; height:48px; border-radius:14px; background:#FF0000; box-shadow:0 6px 20px -4px rgba(0,0,0,.5); transition:background .18s ease, transform .18s ease; }
+.aws-yt-play-big::after{ content:""; position:absolute; top:50%; left:52%; transform:translate(-50%,-50%); width:0; height:0; border-style:solid; border-width:11px 0 11px 18px; border-color:transparent transparent transparent #fff; }
+.aws-yt-poster:hover .aws-yt-play-big{ background:#e50000; transform:translate(-50%,-50%) scale(1.06); }
+.aws-yt-wordmark{ position:absolute; left:12px; bottom:10px; display:inline-flex; filter:drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
+.aws-yt-cap{ margin:.65rem 0 0 !important; display:flex; flex-wrap:wrap; align-items:baseline; gap:.2rem .6rem; }
+.aws-yt-cap .aws-yt-kicker{ color:var(--c-muted); }
+.aws-yt-cap a{ font-family:var(--wp--preset--font-family--fraunces); font-size:1.15rem; font-weight:600; color:var(--c-ink); text-decoration:none; }
+.aws-yt-cap a:hover{ color:var(--c-primary); }
+.aws-yt.has-poster .aws-yt-note{ color:var(--c-muted) !important; margin:.5rem 0 0 !important; }
 
 /* ---------- Aktuelles: Fluss-Zeitstrahl ---------- */
 .news-track { position: relative; margin-top: 2.8rem; }

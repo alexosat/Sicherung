@@ -118,7 +118,68 @@ function aws_youtube_latest_video_id( $channel_id ) {
 }
 
 /**
+ * Vorschaubild der neuesten Folge lokal (auf dem eigenen Server) zwischenspeichern
+ * und dessen URL zurückgeben. So sieht die Karte wie ein eingebettetes Video aus,
+ * ohne dass vor dem Klick eine Verbindung zu YouTube/Google aufgebaut wird:
+ * Das Bild wird serverseitig (Server ↔ YouTube) geholt und von der eigenen
+ * Domain ausgeliefert.
+ *
+ * @param string $video_id Video-ID (11 Zeichen).
+ * @return string Lokale Bild-URL oder '' (dann greift die Rückfall-Grafik).
+ */
+function aws_youtube_poster_url( $video_id ) {
+	$video_id = preg_replace( '/[^A-Za-z0-9_-]/', '', (string) $video_id );
+	if ( 11 !== strlen( $video_id ) ) {
+		return '';
+	}
+
+	$uploads = wp_upload_dir();
+	if ( ! empty( $uploads['error'] ) ) {
+		return '';
+	}
+
+	$dir  = trailingslashit( $uploads['basedir'] ) . 'aws-youtube';
+	$file = $dir . '/' . $video_id . '.jpg';
+	$url  = trailingslashit( $uploads['baseurl'] ) . 'aws-youtube/' . $video_id . '.jpg';
+
+	if ( file_exists( $file ) ) {
+		return $url;
+	}
+	if ( ! wp_mkdir_p( $dir ) ) {
+		return '';
+	}
+
+	$sources = array(
+		'https://i.ytimg.com/vi/' . $video_id . '/sddefault.jpg',
+		'https://i.ytimg.com/vi/' . $video_id . '/hqdefault.jpg',
+	);
+	foreach ( $sources as $src ) {
+		$res = wp_remote_get( $src, array( 'timeout' => 8, 'redirection' => 3 ) );
+		if ( is_wp_error( $res ) || 200 !== (int) wp_remote_retrieve_response_code( $res ) ) {
+			continue;
+		}
+		$body = wp_remote_retrieve_body( $res );
+		if ( strlen( $body ) < 2000 ) {
+			continue; // Platzhalter/leeres Bild – nächste Quelle versuchen.
+		}
+		if ( false === file_put_contents( $file, $body ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions
+			return '';
+		}
+		// Veraltete Vorschaubilder im eigenen Unterordner aufräumen.
+		foreach ( (array) glob( $dir . '/*.jpg' ) as $old ) {
+			if ( $old !== $file ) {
+				@unlink( $old ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+			}
+		}
+		return $url;
+	}
+	return '';
+}
+
+/**
  * Shortcode [aws_youtube]: datenschutzfreundliche YouTube-Karte.
+ * Mit echtem Vorschaubild (lokal gecacht) sieht sie aus wie ein eingebettetes
+ * Video; der Player lädt erst nach Klick (youtube-nocookie.com).
  */
 function aws_youtube_shortcode() {
 	$handle      = aws_youtube_handle();
@@ -127,36 +188,67 @@ function aws_youtube_shortcode() {
 	$uploads     = aws_youtube_uploads_id( $channel_id );
 	$video       = aws_youtube_latest_video_id( $channel_id );
 	$can_embed   = ( '' !== $video || '' !== $uploads );
+	$poster      = $video ? aws_youtube_poster_url( $video ) : '';
 
 	ob_start();
-	?>
-	<div class="aws-yt<?php echo $can_embed ? '' : ' is-link'; ?>"
-		<?php echo $video ? ' data-video="' . esc_attr( $video ) . '"' : ''; ?>
-		<?php echo $uploads ? ' data-list="' . esc_attr( $uploads ) . '"' : ''; ?>>
-		<div class="aws-yt-facade">
-			<div class="aws-yt-top">
-				<span class="aws-yt-logo" aria-hidden="true">
-					<svg viewBox="0 0 28 20" width="28" height="20" focusable="false"><rect width="28" height="20" rx="5" fill="#FF0000"/><path d="M11 6 L19 10 L11 14 Z" fill="#fff"/></svg>
-				</span>
-				<span class="aws-yt-kicker">YouTube&#8201;·&#8201;Podcast</span>
+
+	// Variante 1: Poster (echtes Vorschaubild) – wirkt wie ein eingebettetes Video.
+	if ( $can_embed && '' !== $poster ) :
+		?>
+		<div class="aws-yt has-poster"
+			<?php echo $video ? ' data-video="' . esc_attr( $video ) . '"' : ''; ?>
+			<?php echo $uploads ? ' data-list="' . esc_attr( $uploads ) . '"' : ''; ?>>
+			<div class="aws-yt-facade">
+				<button type="button" class="aws-yt-load aws-yt-poster" style="background-image:url(<?php echo esc_url( $poster ); ?>)" aria-label="Neueste Folge von Schulhofgeflüster abspielen">
+					<span class="aws-yt-play-big" aria-hidden="true"></span>
+					<span class="aws-yt-wordmark" aria-hidden="true"><svg viewBox="0 0 28 20" width="28" height="20" focusable="false"><rect width="28" height="20" rx="5" fill="#FF0000"/><path d="M11 6 L19 10 L11 14 Z" fill="#fff"/></svg></span>
+				</button>
+				<p class="aws-yt-cap"><span class="aws-yt-kicker">YouTube&#8201;·&#8201;Neueste Folge</span><a href="<?php echo esc_url( $channel_url ); ?>" target="_blank" rel="noopener noreferrer">Schulhofgeflüster</a></p>
+				<p class="aws-yt-note">Erst beim Klick wird YouTube geladen – vorher werden keine Daten an Google übertragen.</p>
 			</div>
-			<p class="aws-yt-title"><a href="<?php echo esc_url( $channel_url ); ?>" target="_blank" rel="noopener noreferrer">Schulhofgeflüster</a></p>
-			<p class="aws-yt-sub"><?php echo $can_embed ? 'Unsere neueste Folge – direkt hier abspielen.' : 'Unser Schul-Podcast auf YouTube.'; ?></p>
-			<?php if ( $can_embed ) : ?>
+		</div>
+		<?php
+	// Variante 2: Grafik-Karte (ohne Vorschaubild, aber abspielbar).
+	elseif ( $can_embed ) :
+		?>
+		<div class="aws-yt"
+			<?php echo $video ? ' data-video="' . esc_attr( $video ) . '"' : ''; ?>
+			<?php echo $uploads ? ' data-list="' . esc_attr( $uploads ) . '"' : ''; ?>>
+			<div class="aws-yt-facade">
+				<div class="aws-yt-top">
+					<span class="aws-yt-logo" aria-hidden="true"><svg viewBox="0 0 28 20" width="28" height="20" focusable="false"><rect width="28" height="20" rx="5" fill="#FF0000"/><path d="M11 6 L19 10 L11 14 Z" fill="#fff"/></svg></span>
+					<span class="aws-yt-kicker">YouTube&#8201;·&#8201;Podcast</span>
+				</div>
+				<p class="aws-yt-title"><a href="<?php echo esc_url( $channel_url ); ?>" target="_blank" rel="noopener noreferrer">Schulhofgeflüster</a></p>
+				<p class="aws-yt-sub">Unsere neueste Folge – direkt hier abspielen.</p>
 				<button type="button" class="aws-yt-load">
 					<span class="aws-yt-play" aria-hidden="true"></span>
 					Neueste Folge abspielen
 				</button>
 				<p class="aws-yt-note">Erst beim Klick wird YouTube geladen – vorher werden keine Daten an Google übertragen.</p>
-			<?php else : ?>
+			</div>
+		</div>
+		<?php
+	// Variante 3: reiner Kanal-Link (nichts ermittelbar).
+	else :
+		?>
+		<div class="aws-yt is-link">
+			<div class="aws-yt-facade">
+				<div class="aws-yt-top">
+					<span class="aws-yt-logo" aria-hidden="true"><svg viewBox="0 0 28 20" width="28" height="20" focusable="false"><rect width="28" height="20" rx="5" fill="#FF0000"/><path d="M11 6 L19 10 L11 14 Z" fill="#fff"/></svg></span>
+					<span class="aws-yt-kicker">YouTube&#8201;·&#8201;Podcast</span>
+				</div>
+				<p class="aws-yt-title"><a href="<?php echo esc_url( $channel_url ); ?>" target="_blank" rel="noopener noreferrer">Schulhofgeflüster</a></p>
+				<p class="aws-yt-sub">Unser Schul-Podcast auf YouTube.</p>
 				<a class="aws-yt-load aws-yt-link" href="<?php echo esc_url( $channel_url ); ?>" target="_blank" rel="noopener noreferrer">
 					<span class="aws-yt-play" aria-hidden="true"></span>
 					Zum YouTube-Kanal
 				</a>
-			<?php endif; ?>
+			</div>
 		</div>
-	</div>
-	<?php
+		<?php
+	endif;
+
 	return trim( ob_get_clean() );
 }
 add_shortcode( 'aws_youtube', 'aws_youtube_shortcode' );
